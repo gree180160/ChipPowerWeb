@@ -1,7 +1,7 @@
 
 <template>
-  <!-- 路由挂载点：所有路由组件都会渲染到这里 -->
-  <router-view />
+      <!-- 路由挂载点：所有路由组件都会渲染到这里 -->
+      <router-view></router-view>
 </template>
 
 <script setup>

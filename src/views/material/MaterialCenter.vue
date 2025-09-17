@@ -1,19 +1,355 @@
-
 <template>
-    <div class="flex h-screen">
-      <!-- 侧边栏 -->
-      <aside>...</aside>
-      
-      <!-- 主内容区：子路由（如 DataCenter）会渲染到这里 -->
-      <div class="flex-1">
-        <!-- 面包屑、顶部导航 -->
-        <header>...</header>
-        <p>materialCenter</p>
-        <!-- 子路由挂载点！必须有这行 -->
-        <main class="p-6">
+  <div class="p-6 bg-gray-50">
+    <!-- 页面标题 -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-left">物料管理 > 物料中心</h2>
+      <p class="text-gray-600 mt-1">管理所有电子元器件物料信息，支持查询、编辑、导出等操作</p>
+    </div>
 
-          <router-view />
-        </main>
+    <!-- 操作栏：新增 + 批量操作 -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex space-x-3">
+        <button class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center">
+          <i class="fa fa-plus mr-2"></i>新增物料
+        </button>
+        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 flex items-center">
+          <i class="fa fa-download mr-2"></i>批量导入
+        </button>
+        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 flex items-center">
+          <i class="fa fa-upload mr-2"></i>批量导出
+        </button>
+      </div>
+      <div class="flex items-center space-x-2">
+        <label class="text-gray-700">显示：</label>
+        <select 
+          v-model="pageSize" 
+          class="px-3 py-1 border border-gray-300 rounded-md text-sm"
+          @change="fetchMaterialData"
+        >
+          <option value="10">10条/页</option>
+          <option value="20">20条/页</option>
+          <option value="50">50条/页</option>
+          <option value="100">100条/页</option>
+        </select>
       </div>
     </div>
-  </template>
+
+    <!-- 查询筛选区域 -->
+    <div class="bg-white p-4 rounded-md shadow-sm mb-6">
+      <div class="grid grid-cols-4 gap-4">
+        <!-- 物料名称查询 -->
+        <div class="flex flex-col">
+          <label class="text-sm text-gray-700 mb-1">物料名称</label>
+          <input 
+            v-model="searchParams.name" 
+            type="text" 
+            placeholder="请输入物料名称"
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+          >
+        </div>
+        <!-- 分类筛选 -->
+        <div class="flex flex-col">
+          <label class="text-sm text-gray-700 mb-1">物料分类</label>
+          <select 
+            v-model="searchParams.category" 
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+          >
+            <option v-for="item in categoryOptions" :key="item" :value="item === '全部分类' ? '' : item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <!-- 品牌筛选 -->
+        <div class="flex flex-col">
+          <label class="text-sm text-gray-700 mb-1">品牌</label>
+          <select 
+            v-model="searchParams.brand" 
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+          >
+            <option v-for="item in brandOptions" :key="item" :value="item === '全部品牌' ? '' : item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <!-- 状态筛选 -->
+        <div class="flex flex-col">
+          <label class="text-sm text-gray-700 mb-1">状态</label>
+          <select 
+            v-model="searchParams.status" 
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+          >
+            <option v-for="item in statusOptions" :key="item" :value="item === '全部状态' ? '' : item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <!-- 时间筛选 + 查询按钮 -->
+      <div class="flex items-end justify-between mt-4">
+        <div class="flex space-x-4">
+          <div class="flex flex-col">
+            <label class="text-sm text-gray-700 mb-1">创建时间</label>
+            <div class="flex items-center space-x-2">
+              <input 
+                v-model="searchParams.startTime" 
+                type="date" 
+                class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+              >
+              <span class="text-gray-500">-</span>
+              <input 
+                v-model="searchParams.endTime" 
+                type="date" 
+                class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+              >
+            </div>
+          </div>
+        </div>
+        <div class="flex space-x-3">
+          <button 
+            class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            @click="resetSearch"
+          >
+            重置
+          </button>
+          <button 
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            @click="fetchMaterialData"
+          >
+            <i class="fa fa-search mr-1"></i>查询
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 物料列表表格 -->
+    <div class="bg-white rounded-md shadow-sm overflow-hidden mb-6">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+              <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">物料编码</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">物料名称</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">分类</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">品牌</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">型号规格</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">库存数量</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">单价(元)</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <!-- 无数据状态 -->
+          <tr v-if="!materialList.length">
+            <td colspan="10" class="px-6 py-8 text-center text-gray-500">
+              <i class="fa fa-search-minus mr-2"></i>未查询到符合条件的物料数据
+            </td>
+          </tr>
+          <!-- 物料数据列表 -->
+          <tr v-for="(item, index) in materialList" :key="item.id" class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.id }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.category }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.brand }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+              <div>{{ item.model }}</div>
+              <div class="text-gray-500 text-xs mt-0.5">{{ item.spec }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.stock }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.price.toFixed(2) }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span 
+                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                :class="item.status === '正常' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+              >
+                {{ item.status }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button class="text-blue-600 hover:text-blue-900 mr-3">
+                <i class="fa fa-edit mr-1"></i>编辑
+              </button>
+              <button class="text-green-600 hover:text-green-900 mr-3">
+                <i class="fa fa-eye mr-1"></i>详情
+              </button>
+              <button class="text-red-600 hover:text-red-900" @click="handleDelete(item.id)">
+                <i class="fa fa-trash mr-1"></i>删除
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分页控件 -->
+    <div class="flex justify-between items-center">
+      <div class="text-sm text-gray-500">
+        显示 {{ (currentPage - 1) * pageSize + 1 }} 至 {{ Math.min(currentPage * pageSize, totalCount) }} 条，共 {{ totalCount }} 条
+      </div>
+      <div class="flex items-center space-x-1">
+        <button 
+          class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+          :disabled="currentPage === 1"
+          @click="changePage(currentPage - 1)"
+        >
+          <i class="fa fa-chevron-left text-xs"></i> 上一页
+        </button>
+        <button 
+          v-for="page in pageRange" 
+          :key="page"
+          class="px-3 py-1 border border-gray-300 rounded-md text-sm"
+          :class="currentPage === page ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'"
+          @click="changePage(page)"
+        >
+          {{ page }}
+        </button>
+        <button 
+          class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+          :disabled="currentPage === totalPages"
+          @click="changePage(currentPage + 1)"
+        >
+          下一页 <i class="fa fa-chevron-right text-xs"></i>
+        </button>
+        <div class="flex items-center space-x-1 ml-2">
+          <span class="text-sm text-gray-700">跳至</span>
+          <input 
+            v-model="targetPage" 
+            type="number" 
+            min="1" 
+            :max="totalPages || 1"
+            class="w-12 px-2 py-1 border border-gray-300 rounded-md text-sm text-center"
+          >
+          <span class="text-sm text-gray-700">页</span>
+          <button 
+            class="px-2 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+            @click="changePage(Number(targetPage))"
+          >
+            确定
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+
+// 分页相关状态
+const currentPage = ref(1)
+const pageSize = ref(10)
+const targetPage = ref(1)
+const totalCount = ref(0)
+const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value))
+
+// 搜索筛选参数
+const searchParams = ref({
+  name: '',
+  category: '',
+  brand: '',
+  status: '',
+  startTime: '',
+  endTime: ''
+})
+
+// 物料数据相关状态
+const materialList = ref([])
+const categoryOptions = ref([])
+const brandOptions = ref([])
+const statusOptions = ref([])
+
+// 生成分页页码范围（最多显示5个页码）
+const pageRange = computed(() => {
+  const range = []
+  const maxShow = 5
+  let start = Math.max(1, currentPage.value - Math.floor(maxShow / 2))
+  let end = start + maxShow - 1
+
+  // 调整结束页码不超过总页数
+  if (end > totalPages.value) {
+    end = totalPages.value
+    start = Math.max(1, end - maxShow + 1)
+  }
+
+  for (let i = start; i <= end; i++) {
+    range.push(i)
+  }
+  return range
+})
+
+// 模拟网络请求：获取物料数据
+const fetchMaterialData = async () => {
+  try {
+    // 实际项目中可替换为后端API，携带分页和筛选参数
+    const response = await fetch('/MaterialCenter.json')
+    const data = await response.json()
+
+    // 赋值模拟数据（实际项目需根据接口返回结构调整）
+    materialList.value = data.materialList
+    totalCount.value = data.totalCount
+    categoryOptions.value = data.categoryOptions
+    brandOptions.value = data.brandOptions
+    statusOptions.value = data.statusOptions
+
+    // 同步目标页码
+    targetPage.value = currentPage.value
+  } catch (error) {
+    console.error('物料数据获取失败:', error)
+    materialList.value = []
+    totalCount.value = 0
+  }
+}
+
+// 重置搜索筛选条件
+const resetSearch = () => {
+  searchParams.value = {
+    name: '',
+    category: '',
+    brand: '',
+    status: '',
+    startTime: '',
+    endTime: ''
+  }
+  currentPage.value = 1
+  fetchMaterialData()
+}
+
+// 切换页码
+const changePage = (page) => {
+  // 边界值处理
+  if (page < 1 || page > totalPages.value) return
+  currentPage.value = page
+  targetPage.value = page
+  fetchMaterialData()
+}
+
+// 删除物料（模拟）
+const handleDelete = (id) => {
+  if (confirm(`确定要删除物料【${id}】吗？删除后不可恢复！`)) {
+    // 实际项目中调用删除接口
+    materialList.value = materialList.value.filter(item => item.id !== id)
+    totalCount.value -= 1
+  }
+}
+
+// 页面挂载时初始化数据
+onMounted(() => {
+  fetchMaterialData()
+})
+</script>
+
+<style scoped>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 表格单元格溢出处理优化 */
+.table-cell-ellipsis {
+  @apply overflow-hidden text-ellipsis whitespace-nowrap;
+}
+</style>

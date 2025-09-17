@@ -1,226 +1,228 @@
 <template>
-    <div class="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
-      <!-- 侧边栏导航 -->
-      <aside class="w-64 bg-white dark:bg-gray-800 shadow-md z-10 hidden md:block">
-        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h1 class="text-xl font-bold text-blue-600 dark:text-blue-400">芯片数据平台</h1>
+  <div class="flex h-screen w-screen bg-gray-50">
+    <!-- 左侧导航栏 -->
+    <div class="w-64 bg-white border-r border-gray-200 h-full">
+      <!-- 顶部Logo -->
+      <div class="p-4 border-b border-gray-200">
+        <div class="flex items-center">
+          <i class="fa fa-microchip text-green-600 text-3xl mr-2"></i>
+          <span class="text-2xl font-semibold text-gray-800 ml-5">芯动力</span>
         </div>
-        
-        <nav class="p-4">
-          <ul class="space-y-1">
-            <li>
-              <router-link 
-                to="/datacenter" 
-                class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                :class="isActive('/datacenter') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : ''"
-              >
-                <i class="fa fa-database mr-3" aria-hidden="true"></i>
-                数据中心
-              </router-link>
-            </li>
-            
-            <li>
-              <router-link 
-                to="/category" 
-                class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                :class="isActive('/category') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : ''"
-              >
-                <i class="fa fa-tags mr-3" aria-hidden="true"></i>
-                分类管理
-              </router-link>
-            </li>
-            
-            <!-- 物料中心 - 带有子菜单 -->
-            <li>
-              <button 
-                @click="toggleSubmenu('material')"
-                class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
-                :class="isActive('/material') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : ''"
-              >
-                <div class="flex items-center">
-                  <i class="fa fa-cubes mr-3" aria-hidden="true"></i>
-                  物料中心
-                </div>
-                <i class="fa fa-chevron-down text-xs transition-transform" :class="{ 'rotate-180': submenus.material }" aria-hidden="true"></i>
-              </button>
-              
-              <ul class="pl-10 mt-1 space-y-1" v-if="submenus.material">
-                <li>
-                  <router-link 
-                    to="/material/model-info" 
-                    class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm"
-                    :class="isActive('/material/model-info') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : ''"
-                  >
-                    型号基础信息
-                  </router-link>
-                </li>
-              </ul>
-            </li>
-            
-            <!-- 任务列表 - 带有子菜单 -->
-            <li>
-              <button 
-                @click="toggleSubmenu('tasks')"
-                class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
-                :class="isActive('/tasks') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : ''"
-              >
-                <div class="flex items-center">
-                  <i class="fa fa-list-alt mr-3" aria-hidden="true"></i>
-                  任务列表
-                </div>
-                <i class="fa fa-chevron-down text-xs transition-transform" :class="{ 'rotate-180': submenus.tasks }" aria-hidden="true"></i>
-              </button>
-              
-              <ul class="pl-10 mt-1 space-y-1" v-if="submenus.tasks">
-                <li>
-                  <router-link 
-                    to="/tasks" 
-                    class="flex items-center px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm"
-                    :class="isActive('/tasks') && !$route.params.id ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : ''"
-                  >
-                    任务列表首页
-                  </router-link>
-                </li>
-                <!-- 任务详情是动态路由，这里不直接列出 -->
-              </ul>
-            </li>
-            
-            <li class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <button 
-                @click="logout"
-                class="flex items-center w-full px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-red-600 dark:text-red-400"
-              >
-                <i class="fa fa-sign-out mr-3" aria-hidden="true"></i>
-                退出登录
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </aside>
+      </div>
       
-      <!-- 主内容区域 -->
-      <div class="flex-1 flex flex-col overflow-hidden">
-        <!-- 顶部导航栏 -->
-        <header class="bg-white dark:bg-gray-800 shadow-sm py-3 px-6 flex justify-between items-center">
-          <button class="md:hidden" @click="toggleMobileMenu">
-            <i class="fa fa-bars text-xl" aria-hidden="true"></i>
-          </button>
+      <!-- 导航菜单 -->
+      <nav class="py-4">
+        <ul class="space-y-1 px-2">
+          <!-- 数据中心 -->
+          <li>
+            <router-link 
+              to="/datacenter"
+              class="flex items-center px-3 py-2 rounded-md text-sm"
+              :class="isActive('/datacenter') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+            >
+              <i class="fa fa-server mr-3"></i>
+              数据中心
+            </router-link>
+          </li>
           
-          <div class="flex items-center space-x-4">
-            <div class="relative">
-              <i class="fa fa-bell-o text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer" aria-hidden="true"></i>
-              <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
-            </div>
-            
-            <div class="flex items-center">
-              <img src="https://picsum.photos/id/1005/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
-              <span class="text-sm font-medium">管理员</span>
-            </div>
-          </div>
-        </header>
-        
-        <!-- 面包屑导航 -->
-        <div class="bg-gray-50 dark:bg-gray-800/50 py-2 px-6 border-b border-gray-200 dark:border-gray-700 text-sm">
-          <div class="flex items-center">
-            <router-link to="/" class="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400">首页</router-link>
-            <i class="fa fa-angle-right mx-2 text-gray-400 text-xs" aria-hidden="true"></i>
-            
-            <template v-for="(item, index) in $route.meta.breadcrumb" :key="index">
-              <span v-if="index === $route.meta.breadcrumb.length - 1" class="text-gray-800 dark:text-gray-200">
-                {{ item }}
-              </span>
-              <template v-else>
+          <!-- 物料管理（可展开） -->
+          <li>
+            <button 
+              class="flex items-center justify-between w-full px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100"
+              @click="toggleSubmenu('material')"
+            >
+              <div class="flex items-center">
+                <i class="fa fa-cubes mr-3"></i>
+                物料管理
+              </div>
+              <i 
+                class="fa fa-chevron-down w-4 h-4 transition-transform duration-200" 
+                :class="{ 'rotate-180': submenuOpen?.material }"
+              ></i>
+            </button>
+            <ul class="ml-6 mt-1 space-y-1" v-if="submenuOpen?.material">
+              <li>
                 <router-link 
-                  :to="getBreadcrumbPath(index)" 
-                  class="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
+                  to="/category"
+                  class="block px-3 py-2 rounded-md text-sm"
+                  :class="isActive('/category') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
                 >
-                  {{ item }}
+                  <i class="fa fa-tags mr-2"></i>分类管理
                 </router-link>
-                <i class="fa fa-angle-right mx-2 text-gray-400 text-xs" aria-hidden="true"></i>
-              </template>
-            </template>
-          </div>
-        </div>
-        
-        <!-- 页面内容 -->
-        <main class="flex-1 overflow-y-auto p-6">
-          <router-view />
-        </main>
-      </div>
-      
-      <!-- 移动端侧边栏 -->
-      <div v-if="mobileMenuOpen" class="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden" @click="toggleMobileMenu"></div>
-      <div 
-        v-if="mobileMenuOpen" 
-        class="fixed top-0 left-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg z-30 md:hidden transform transition-transform"
-      >
-        <!-- 移动端侧边栏内容与桌面版相同 -->
-        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h1 class="text-xl font-bold text-blue-600 dark:text-blue-400">芯片数据平台</h1>
-        </div>
-        
-        <nav class="p-4">
-          <!-- 这里的导航内容与桌面版相同 -->
-          <!-- 简化起见，省略重复代码 -->
-        </nav>
-      </div>
+              </li>
+              <li>
+                <router-link 
+                  to="/material"
+                  class="block px-3 py-2 rounded-md text-sm"
+                  :class="isActive('/material') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+                >
+                  <i class="fa fa-cube mr-2"></i>物料中心
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          
+          <!-- 分析管理（可展开） -->
+          <li>
+            <button 
+              class="flex items-center justify-between w-full px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100"
+              @click="toggleSubmenu('analysis')"
+            >
+              <div class="flex items-center">
+                <i class="fa fa-chart-line mr-3"></i>
+                分析管理
+              </div>
+              <i 
+                class="fa fa-chevron-down w-4 h-4 transition-transform duration-200" 
+                :class="{ 'rotate-180': submenuOpen?.analysis }"
+              ></i>
+            </button>
+            <ul class="ml-6 mt-1 space-y-1" v-if="submenuOpen?.analysis">
+              <li>
+                <router-link 
+                  to="/analysis/task"
+                  class="block px-3 py-2 rounded-md text-sm"
+                  :class="isActive('/analysis/task') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+                >
+                  <i class="fa fa-tasks mr-2"></i>任务管理
+                </router-link>
+              </li>
+              <li>
+                <router-link 
+                  to="/analysis/query"
+                  class="block px-3 py-2 rounded-md text-sm"
+                  :class="isActive('/analysis/query') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+                >
+                  <i class="fa fa-search mr-2"></i>分析查询
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          
+          <!-- 监控管理（可展开） -->
+          <li>
+            <button 
+              class="flex items-center justify-between w-full px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100"
+              @click="toggleSubmenu('monitor')"
+            >
+              <div class="flex items-center">
+                <i class="fa fa-eye mr-3"></i>
+                监控管理
+              </div>
+              <i 
+                class="fa fa-chevron-down w-4 h-4 transition-transform duration-200" 
+                :class="{ 'rotate-180': submenuOpen?.monitor }"
+              ></i>
+            </button>
+            <ul class="ml-6 mt-1 space-y-1" v-if="submenuOpen?.monitor">
+              <li>
+                <router-link 
+                  to="/monitor/task"
+                  class="block px-3 py-2 rounded-md text-sm"
+                  :class="isActive('/monitor/task') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+                >
+                  <i class="fa fa-tasks mr-2"></i>监控任务
+                </router-link>
+              </li>
+              <li>
+                <router-link 
+                  to="/monitor/query"
+                  class="block px-3 py-2 rounded-md text-sm"
+                  :class="isActive('/monitor/query') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+                >
+                  <i class="fa fa-search mr-2"></i>监控查询
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          
+          <!-- 交易管理 -->
+          <li>
+            <router-link 
+              to="/transaction"
+              class="flex items-center px-3 py-2 rounded-md text-sm"
+              :class="isActive('/transaction') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+            >
+              <i class="fa fa-exchange-alt mr-3"></i>
+              交易管理
+            </router-link>
+          </li>
+          
+          <!-- 系统管理 -->
+          <li>
+            <router-link 
+              to="/system"
+              class="flex items-center px-3 py-2 rounded-md text-sm"
+              :class="isActive('/system') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+            >
+              <i class="fa fa-cog mr-3"></i>
+              系统管理
+            </router-link>
+          </li>
+        </ul>
+      </nav>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  
-  const router = useRouter()
-  const route = useRoute()
-  
-  // 侧边栏子菜单状态
-  const submenus = ref({
-    material: false,
-    tasks: false
+    
+    <!-- 右侧内容区域 - 添加了pr-4（16px右内边距） -->
+    <div class="flex-1 overflow-auto">
+      <router-view />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+// 子菜单展开状态管理
+const submenuOpen = ref({
+  material: false,
+  analysis: false,
+  monitor: false
+})
+
+// 获取当前路由
+const route = useRoute()
+
+// 切换子菜单展开/收起
+const toggleSubmenu = (key) => {
+  // 关闭其他子菜单（实现互斥展开）
+  Object.keys(submenuOpen.value).forEach(k => {
+    if (k !== key) submenuOpen.value[k] = false
   })
-  
-  // 移动端菜单状态
-  const mobileMenuOpen = ref(false)
-  
-  // 切换子菜单
-  const toggleSubmenu = (menu) => {
-    submenus.value[menu] = !submenus.value[menu]
+  // 切换当前子菜单状态
+  submenuOpen.value[key] = !submenuOpen.value[key]
+}
+
+// 判断路由是否匹配，用于高亮当前菜单
+const isActive = (path) => {
+  return route.path.startsWith(path)
+}
+
+// 监听路由变化，自动展开对应父菜单
+watch(route, (newRoute) => {
+  const path = newRoute.path
+  // 根据当前路由自动展开对应的父菜单
+  if (path.startsWith('/category') || path.startsWith('/material')) {
+    submenuOpen.value.material = true
+  } else if (path.startsWith('/analysis')) {
+    submenuOpen.value.analysis = true
+  } else if (path.startsWith('/monitor')) {
+    submenuOpen.value.monitor = true
+  } else {
+    // 关闭所有子菜单
+    Object.keys(submenuOpen.value).forEach(k => {
+      submenuOpen.value[k] = false
+    })
   }
-  
-  // 切换移动端菜单
-  const toggleMobileMenu = () => {
-    mobileMenuOpen.value = !mobileMenuOpen.value
-  }
-  
-  // 检查路由是否激活
-  const isActive = (path) => {
-    return route.path.startsWith(path)
-  }
-  
-  // 计算面包屑路径
-  const getBreadcrumbPath = (index) => {
-    const segments = route.path.split('/').filter(Boolean)
-    return '/' + segments.slice(0, index + 1).join('/')
-  }
-  
-  // 退出登录
-  const logout = () => {
-    localStorage.removeItem('token')
-    router.push('/login')
-  }
-  
-  // 初始化时根据当前路由展开对应的子菜单
-  const initSubmenus = () => {
-    if (route.path.startsWith('/material')) {
-      submenus.value.material = true
-    }
-    if (route.path.startsWith('/tasks')) {
-      submenus.value.tasks = true
-    }
-  }
-  
-  // 页面加载时初始化
-  initSubmenus()
-  </script>
-  
+}, { immediate: true })
+</script>
+
+<style scoped>
+/* 可选：调整图标大小和间距 */
+.fa {
+  width: 1.25rem; /* 图标宽度统一 */
+  text-align: center; /* 确保图标居中对齐 */
+}
+
+</style>
