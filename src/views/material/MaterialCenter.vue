@@ -3,7 +3,6 @@
     <!-- 页面标题 -->
     <div class="mb-6">
       <h2 class="text-xl font-semibold text-left">物料管理 > 物料中心</h2>
-      <p class="text-gray-600 mt-1">管理所有电子元器件物料信息，支持查询、编辑、导出等操作</p>
     </div>
 
     <!-- 操作栏：新增 + 批量操作 -->
@@ -34,90 +33,119 @@
       </div>
     </div>
 
-    <!-- 查询筛选区域 -->
-    <div class="bg-white p-4 rounded-md shadow-sm mb-6">
-      <div class="grid grid-cols-4 gap-4">
-        <!-- 物料名称查询 -->
+        <!-- 查询筛选区域 -->
+        <div class="bg-white p-4 rounded-md shadow-sm mb-6">
+      <!-- 第一行：型号、品牌、物料类别 -->
+      <div class="grid grid-cols-3 gap-6 mb-4">
+        <!-- 型号查询 -->
         <div class="flex flex-col">
-          <label class="text-sm text-gray-700 mb-1">物料名称</label>
+          <label class="text-sm text-gray-700 mb-1 text-left">型号</label>
           <input 
-            v-model="searchParams.name" 
+            v-model="searchParams.model" 
             type="text" 
-            placeholder="请输入物料名称"
+            placeholder="请输入型号"
             class="px-3 py-2 border border-gray-300 rounded-md text-sm"
           >
         </div>
-        <!-- 分类筛选 -->
-        <div class="flex flex-col">
-          <label class="text-sm text-gray-700 mb-1">物料分类</label>
-          <select 
-            v-model="searchParams.category" 
-            class="px-3 py-2 border border-gray-300 rounded-md text-sm"
-          >
-            <option v-for="item in categoryOptions" :key="item" :value="item === '全部分类' ? '' : item">
-              {{ item }}
-            </option>
-          </select>
-        </div>
+        
         <!-- 品牌筛选 -->
         <div class="flex flex-col">
-          <label class="text-sm text-gray-700 mb-1">品牌</label>
+          <label class="text-sm text-gray-700 mb-1 text-left">品牌</label>
           <select 
             v-model="searchParams.brand" 
             class="px-3 py-2 border border-gray-300 rounded-md text-sm"
           >
-            <option v-for="item in brandOptions" :key="item" :value="item === '全部品牌' ? '' : item">
+            <option value="">全部品牌</option>
+            <option v-for="item in brandOptions" :key="item" :value="item">
               {{ item }}
             </option>
           </select>
         </div>
-        <!-- 状态筛选 -->
+        
+        <!-- 物料类别筛选 -->
         <div class="flex flex-col">
-          <label class="text-sm text-gray-700 mb-1">状态</label>
+          <label class="text-sm text-gray-700 mb-1 text-left">物料类别</label>
           <select 
-            v-model="searchParams.status" 
+            v-model="searchParams.category" 
             class="px-3 py-2 border border-gray-300 rounded-md text-sm"
           >
-            <option v-for="item in statusOptions" :key="item" :value="item === '全部状态' ? '' : item">
+            <option value="">全部分类</option>
+            <option v-for="item in categoryOptions" :key="item" :value="item">
               {{ item }}
             </option>
           </select>
         </div>
       </div>
-      <!-- 时间筛选 + 查询按钮 -->
-      <div class="flex items-end justify-between mt-4">
-        <div class="flex space-x-4">
-          <div class="flex flex-col">
-            <label class="text-sm text-gray-700 mb-1">创建时间</label>
-            <div class="flex items-center space-x-2">
-              <input 
-                v-model="searchParams.startTime" 
-                type="date" 
-                class="px-3 py-2 border border-gray-300 rounded-md text-sm"
-              >
-              <span class="text-gray-500">-</span>
-              <input 
-                v-model="searchParams.endTime" 
-                type="date" 
-                class="px-3 py-2 border border-gray-300 rounded-md text-sm"
-              >
-            </div>
+      
+      <!-- 第二行：区域、入库日期、分析进度 -->
+      <div class="grid grid-cols-3 gap-6 mb-4">
+        <!-- 区域筛选 -->
+        <div class="flex flex-col">
+          <label class="text-sm text-gray-700 mb-1 text-left">区域</label>
+          <select 
+            v-model="searchParams.region" 
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+          >
+            <option value="">全部区域</option>
+            <option value="中国">中国</option>
+            <option value="美国">美国</option>
+            <option value="日本">日本</option>
+            <option value="俄罗斯">俄罗斯</option>
+            <option value="欧洲">欧洲</option>
+          </select>
+        </div>
+        
+        <!-- 入库日期筛选 -->
+        <div class="flex flex-col">
+          <label class="text-sm text-gray-700 mb-1 text-left">入库日期</label>
+          <!-- 日期容器：与上方品牌输入框等宽 -->
+          <div class="flex items-center w-full gap-2 px-0">
+            <!-- 开始时间：左对齐品牌输入框左侧 -->
+            <input 
+              v-model="searchParams.storageStartTime" 
+              type="date" 
+              class="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1"
+              placeholder="开始日期"
+            >
+            <span class="text-gray-500 whitespace-nowrap">至</span>
+            <!-- 结束时间：右对齐品牌输入框右侧 -->
+            <input 
+              v-model="searchParams.storageEndTime" 
+              type="date" 
+              class="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1"
+              placeholder="结束日期"
+            >
           </div>
         </div>
-        <div class="flex space-x-3">
-          <button 
-            class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-            @click="resetSearch"
+        
+        <!-- 分析进度筛选 -->
+        <div class="flex flex-col">
+          <label class="text-sm text-gray-700 mb-1 text-left">分析进度</label>
+          <select 
+            v-model="searchParams.analysisProgress" 
+            class="px-3 py-2 border border-gray-300 rounded-md text-sm"
           >
-            重置
-          </button>
-          <button 
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            @click="fetchMaterialData"
-          >
-            <i class="fa fa-search mr-1"></i>查询
-          </button>
+            <option value="">全部</option>
+            <option value="已完成">已完成</option>
+            <option value="未完成">未完成</option>
+          </select>
         </div>
+      </div>
+      
+      <!-- 查询按钮区域 -->
+      <div class="flex justify-end space-x-3 mt-2">
+        <button 
+          class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+          @click="resetSearch"
+        >
+          重置
+        </button>
+        <button 
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          @click="fetchMaterialData"
+        >
+          <i class="fa fa-search mr-1"></i>查询
+        </button>
       </div>
     </div>
 
@@ -129,14 +157,15 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
               <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
             </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">物料编码</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">物料名称</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">分类</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">型号</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">品牌</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">型号规格</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">库存数量</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">单价(元)</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">产品大类</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">产品大类</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">区域</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">入库日期</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">分析进度</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">规格书</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
           </tr>
         </thead>
@@ -152,23 +181,30 @@
             <td class="px-6 py-4 whitespace-nowrap">
               <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.id }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.category }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.brand }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-              <div>{{ item.model }}</div>
-              <div class="text-gray-500 text-xs mt-0.5">{{ item.spec }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.stock }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.price.toFixed(2) }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.PPN }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.brand }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.category.split(">")[0]?.trim() || ""}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.category.split(">")[1]?.trim() || ""}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.area }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.createTime }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
               <span 
                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                :class="item.status === '正常' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                :class="item.analyseProgress == '1' ? 'bg-green-100 text-green-900' : 'bg-amber-100 text-amber-900'"
+              >
+                {{ item.analyseProgress == 1 ? "已完成" : "进行中" }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span 
+                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                :class="item.status == 'Active' ? 'bg-green-50 text-green-900' : 'bg-red-100 text-red-900'"
               >
                 {{ item.status }}
               </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+              <a class="fa fa-file" link={{item.rulebook}}></a>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
               <button class="text-blue-600 hover:text-blue-900 mr-3">
@@ -248,13 +284,15 @@ const totalCount = ref(0)
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value))
 
 // 搜索筛选参数
+// 补充搜索参数定义（需要添加到原有searchParams中）
 const searchParams = ref({
-  name: '',
-  category: '',
-  brand: '',
-  status: '',
-  startTime: '',
-  endTime: ''
+  // 保留原有其他参数...
+  model: '',               // 新增：型号
+  region: '',              // 新增：区域
+  storageStartTime: '',    // 新增：入库开始日期
+  storageEndTime: '',      // 新增：入库结束日期
+  analysisProgress: ''     // 新增：分析进度
+  // 可删除原有不再使用的参数：status, startTime, endTime等
 })
 
 // 物料数据相关状态
@@ -305,15 +343,16 @@ const fetchMaterialData = async () => {
   }
 }
 
-// 重置搜索筛选条件
+// 重置搜索条件方法（需要同步更新）
 const resetSearch = () => {
   searchParams.value = {
-    name: '',
-    category: '',
+    model: '',
     brand: '',
-    status: '',
-    startTime: '',
-    endTime: ''
+    category: '',
+    region: '',
+    storageStartTime: '',
+    storageEndTime: '',
+    analysisProgress: ''
   }
   currentPage.value = 1
   fetchMaterialData()
@@ -347,6 +386,17 @@ onMounted(() => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 确保日期输入框与品牌输入框的内边距和边框一致 */
+input[type="date"] {
+  /* 继承与品牌选择框相同的内边距和边框样式 */
+  box-sizing: border-box;
+}
+
+/* 日期容器与品牌容器保持相同的水平约束 */
+div:has(input[type="date"]) {
+  /* 确保与上方品牌输入框的父容器拥有相同的布局约束 */
+}
 
 /* 表格单元格溢出处理优化 */
 .table-cell-ellipsis {

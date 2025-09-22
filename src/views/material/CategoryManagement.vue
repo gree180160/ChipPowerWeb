@@ -75,7 +75,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <button class="text-blue-600 hover:text-blue-900 mr-3">编辑</button>
               <button class="text-red-600 hover:text-red-900 mr-3">删除</button>
-              <button class="text-green-600 hover:text-green-900">导出</button>
+              <button class="text-color-#4B5563 hover:text-green-900 fa fa-download mx-2">导出</button>
             </td>
           </tr>
           <tr class="hover:bg-gray-50 transition-colors">
@@ -90,7 +90,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <button class="text-blue-600 hover:text-blue-900 mr-3">编辑</button>
               <button class="text-red-600 hover:text-red-900 mr-3">删除</button>
-              <button class="text-green-600 hover:text-green-900">导出</button>
+              <button class="text-color-#4B5563 hover:text-green-900 fa fa-download mx-2">导出</button>
             </td>
           </tr>
           <tr class="hover:bg-gray-50 transition-colors">
@@ -105,7 +105,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <button class="text-blue-600 hover:text-blue-900 mr-3">编辑</button>
               <button class="text-red-600 hover:text-red-900 mr-3">删除</button>
-              <button class="text-green-600 hover:text-green-900">导出</button>
+              <button class="text-color-#4B5563 hover:text-green-900 fa fa-download mx-2">导出</button>
             </td>
           </tr>
         </tbody>

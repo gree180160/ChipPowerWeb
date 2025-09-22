@@ -43,18 +43,18 @@
             <ul class="ml-6 mt-1 space-y-1" v-if="submenuOpen?.material">
               <li>
                 <router-link 
-                  to="/category"
+                  to="/material/categorymanagement"
                   class="block px-3 py-2 rounded-md text-sm"
-                  :class="isActive('/category') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+                  :class="isActive('/material/categorymanagement') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
                 >
                   <i class="fa fa-tags mr-2"></i>分类管理
                 </router-link>
               </li>
               <li>
                 <router-link 
-                  to="/material"
+                  to="/material/materialcenter"
                   class="block px-3 py-2 rounded-md text-sm"
-                  :class="isActive('/material') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
+                  :class="isActive('/material/materialcenter') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
                 >
                   <i class="fa fa-cube mr-2"></i>物料中心
                 </router-link>
@@ -203,7 +203,7 @@ const isActive = (path) => {
 watch(route, (newRoute) => {
   const path = newRoute.path
   // 根据当前路由自动展开对应的父菜单
-  if (path.startsWith('/category') || path.startsWith('/material')) {
+  if (path.startsWith('/material')) {
     submenuOpen.value.material = true
   } else if (path.startsWith('/analysis')) {
     submenuOpen.value.analysis = true

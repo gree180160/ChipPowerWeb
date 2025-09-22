@@ -1,0 +1,98 @@
+{
+    "totalCount": 168,
+    "currentPage": 1,
+    "pageSize": 10,
+    "taskList": [
+      {
+        "taskId": "TSK20230001",
+        "taskName": "NXP-微波射频",
+        "uploadDate": "2023-12-01",
+        "endDate": "2023-12-31",
+        "priority": 1,
+        "status": "运行中",
+        "modelCount": 12
+      },
+      {
+        "taskId": "TSK20230002",
+        "taskName": "INFINEON-IGBT模块",
+        "uploadDate": "2023-12-05",
+        "endDate": "2023-12-20",
+        "priority": 2,
+        "status": "未开始",
+        "modelCount": 8
+      },
+      {
+        "taskId": "TSK20230003",
+        "taskName": "TI-运算放大器分析",
+        "uploadDate": "2023-11-28",
+        "endDate": "2023-12-15",
+        "priority": 1,
+        "status": "已完成",
+        "modelCount": 15
+      },
+      {
+        "taskId": "TSK20230004",
+        "taskName": "ADI-模数转换器测试",
+        "uploadDate": "2023-12-03",
+        "endDate": "2023-12-25",
+        "priority": 3,
+        "status": "运行中",
+        "modelCount": 9
+      },
+      {
+        "taskId": "TSK20230005",
+        "taskName": "ST-传感器性能验证",
+        "uploadDate": "2023-11-30",
+        "endDate": "2023-12-18",
+        "priority": 2,
+        "status": "已完成",
+        "modelCount": 11
+      },
+      {
+        "taskId": "TSK20230006",
+        "taskName": "XILINX-FPGA开发",
+        "uploadDate": "2023-12-02",
+        "endDate": "2023-12-22",
+        "priority": 1,
+        "status": "未开始",
+        "modelCount": 7
+      },
+      {
+        "taskId": "TSK20230007",
+        "taskName": "MICROCHIP-EEPROM适配",
+        "uploadDate": "2023-11-25",
+        "endDate": "2023-12-10",
+        "priority": 3,
+        "status": "运行中",
+        "modelCount": 6
+      },
+      {
+        "taskId": "TSK20230008",
+        "taskName": "NXP-RFID方案验证",
+        "uploadDate": "2023-12-04",
+        "endDate": "2023-12-28",
+        "priority": 2,
+        "status": "未开始",
+        "modelCount": 10
+      },
+      {
+        "taskId": "TSK20230009",
+        "taskName": "RENESAS-微控制器测试",
+        "uploadDate": "2023-11-29",
+        "endDate": "2023-12-16",
+        "priority": 1,
+        "status": "已完成",
+        "modelCount": 13
+      },
+      {
+        "taskId": "TSK20230010",
+        "taskName": "INFINEON-功率器件分析",
+        "uploadDate": "2023-12-01",
+        "endDate": "2023-12-30",
+        "priority": 3,
+        "status": "运行中",
+        "modelCount": 5
+      }
+    ],
+    "statusOptions": ["全部", "未开始", "运行中", "已完成", "已暂停", "已失败"]
+  }

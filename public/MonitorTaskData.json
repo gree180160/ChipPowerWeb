@@ -1,0 +1,85 @@
+{
+    "total": 126,
+    "taskList": [
+      {
+        "taskId": "TASK202312001",
+        "taskName": "电子元件价格监控",
+        "uploadDate": "2023-12-01",
+        "monitorStartDate": "2023-12-02",
+        "monitorStatus": "进行中",
+        "modelCount": 1234
+      },
+      {
+        "taskId": "TASK202312002",
+        "taskName": "芯片市场分析",
+        "uploadDate": "2023-12-03",
+        "monitorStartDate": "2023-12-04",
+        "monitorStatus": "未开始",
+        "modelCount": 2567
+      },
+      {
+        "taskId": "TASK202312003",
+        "taskName": "传感器性能监测",
+        "uploadDate": "2023-12-05",
+        "monitorStartDate": "2023-12-06",
+        "monitorStatus": "已完成",
+        "modelCount": 890
+      },
+      {
+        "taskId": "TASK202312004",
+        "taskName": "半导体材料跟踪",
+        "uploadDate": "2023-12-07",
+        "monitorStartDate": "2023-12-08",
+        "monitorStatus": "进行中",
+        "modelCount": 1567
+      },
+      {
+        "taskId": "TASK202312005",
+        "taskName": "集成电路分析",
+        "uploadDate": "2023-12-09",
+        "monitorStartDate": "2023-12-10",
+        "monitorStatus": "未开始",
+        "modelCount": 987
+      },
+      {
+        "taskId": "TASK202312006",
+        "taskName": "电子元器件库存监控",
+        "uploadDate": "2023-12-11",
+        "monitorStartDate": "2023-12-12",
+        "monitorStatus": "进行中",
+        "modelCount": 1345
+      },
+      {
+        "taskId": "TASK202312007",
+        "taskName": "新能源电子部件监测",
+        "uploadDate": "2023-12-13",
+        "monitorStartDate": "2023-12-14",
+        "monitorStatus": "已完成",
+        "modelCount": 765
+      },
+      {
+        "taskId": "TASK202312008",
+        "taskName": "消费电子元件分析",
+        "uploadDate": "2023-12-15",
+        "monitorStartDate": "2023-12-16",
+        "monitorStatus": "未开始",
+        "modelCount": 1122
+      },
+      {
+        "taskId": "TASK202312009",
+        "taskName": "工业电子元件监控",
+        "uploadDate": "2023-12-17",
+        "monitorStartDate": "2023-12-18",
+        "monitorStatus": "进行中",
+        "modelCount": 1456
+      },
+      {
+        "taskId": "TASK202312010",
+        "taskName": "汽车电子部件跟踪",
+        "uploadDate": "2023-12-19",
+        "monitorStartDate": "2023-12-20",
+        "monitorStatus": "未开始",
+        "modelCount": 1678
+      }
+    ]
+  }
