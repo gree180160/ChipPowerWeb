@@ -48,12 +48,25 @@ const username = ref('')
 const password = ref('')
 const router = useRouter()
 
+const testUsers = [
+  { username: 'admin', password: 'Calcitrapa0228' },
+  { username: 'river', password: 'Test1234' },
+  { username: 'alex', password: 'Test1234' },
+  { username: 'mark', password: 'Test1234' }
+]
+
 const handleLogin = () => {
-  if (username.value && password.value) {
+  if (!username.value || !password.value) {
+    alert('请输入账号和密码')
+    return
+  }
+  const matched = testUsers.find(u => u.username === username.value && u.password === password.value)
+  if (matched) {
     localStorage.setItem('token', 'valid-token')
+    localStorage.setItem('username', matched.username)
     router.push('/')
   } else {
-    alert('请输入账号和密码')
+    alert('账号或密码错误，请使用测试账号登录')
   }
 }
 </script>

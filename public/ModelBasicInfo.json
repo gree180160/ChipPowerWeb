@@ -1,0 +1,50 @@
+{
+    "model": "STM32F103C8T6",
+    "brand": "意法半导体（STMicroelectronics）",
+    "image": "../src/assets/images/material/ppn01.jpg",
+    "thumbnail1": "../src/assets/images/material/ppn01.jpg",
+    "thumbnail2": "../src/assets/images/material/ppn02.jpg",
+    "status": "Active",
+    "datasheet": "STM32F103C8T6_datasheet.pdf",
+    "packageType": "LQFP-48",
+    "workingTemp": "-40°C ~ +85°C",
+    "description": "STM32F103C8T6 是一款基于 ARM Cortex-M3 内核的 32 位微控制器，主频高达 72MHz， 重有 64KB Flash，20KB SRAM， 支接多种通信接口，如高速 USB、 CAN、 I2C、 SPI、 USART 等，适用于工业控制、消费电子、医疗设备等多个领域。",
+    "storageDate": "2023-10-15",
+    "analysisStatus": "分析完成",
+    "analysisDate": "2023-10-18",
+    "level": "A级",
+    "score": "95",
+    "core": "ARM Cortex-M3",
+    "sram": "20 KB",
+    "timers": "4个 16位定时器",
+    "maxFreq": "72 MHz",
+    "workingVoltage": "2.0V ~ 3.6V",
+    "adcChannels": "10个 12位通道",
+    "flash": "64 KB",
+    "gpioCount": "37",
+    "commInterfaces": "2xI2C, 2xSPI, 3xUSART",
+    "relatedModel1": "STM32F103C8T6TR",
+    "relatedModel1Desc": "卷带包装版本",
+    "relatedModel2": "STM32F103C8T6-TRAY",
+    "relatedModel2Desc": "托盘包装版本",
+    "alternatives": [
+      {
+        "model": "GD32F103C8T6",
+        "brand": "兆易创新（GigaDevice）",
+        "type": "直接替代",
+        "compatibility": "98"
+      },
+      {
+        "model": "APM32F103C8T6",
+        "brand": "极海半导体（Geehy）",
+        "type": "引脚兼容",
+        "compatibility": "95"
+      },
+      {
+        "model": "AT32F103C8T6",
+        "brand": "雅特力（Arterytek）",
+        "type": "引脚兼容",
+        "compatibility": "92"
+      }
+    ]
+  }

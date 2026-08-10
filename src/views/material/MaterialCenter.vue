@@ -33,8 +33,8 @@
       </div>
     </div>
 
-        <!-- 查询筛选区域 -->
-        <div class="bg-white p-4 rounded-md shadow-sm mb-6">
+    <!-- 查询筛选区域 -->
+    <div class="bg-white p-4 rounded-md shadow-sm mb-6">
       <!-- 第一行：型号、品牌、物料类别 -->
       <div class="grid grid-cols-3 gap-6 mb-4">
         <!-- 型号查询 -->
@@ -98,9 +98,7 @@
         <!-- 入库日期筛选 -->
         <div class="flex flex-col">
           <label class="text-sm text-gray-700 mb-1 text-left">入库日期</label>
-          <!-- 日期容器：与上方品牌输入框等宽 -->
           <div class="flex items-center w-full gap-2 px-0">
-            <!-- 开始时间：左对齐品牌输入框左侧 -->
             <input 
               v-model="searchParams.storageStartTime" 
               type="date" 
@@ -108,7 +106,6 @@
               placeholder="开始日期"
             >
             <span class="text-gray-500 whitespace-nowrap">至</span>
-            <!-- 结束时间：右对齐品牌输入框右侧 -->
             <input 
               v-model="searchParams.storageEndTime" 
               type="date" 
@@ -160,7 +157,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">型号</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">品牌</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">产品大类</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">产品大类</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">产品小类</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">区域</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">入库日期</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">分析进度</th>
@@ -172,7 +169,7 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <!-- 无数据状态 -->
           <tr v-if="!materialList.length">
-            <td colspan="10" class="px-6 py-8 text-center text-gray-500">
+            <td colspan="11" class="px-6 py-8 text-center text-gray-500">
               <i class="fa fa-search-minus mr-2"></i>未查询到符合条件的物料数据
             </td>
           </tr>
@@ -204,13 +201,17 @@
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-              <a class="fa fa-file" link={{item.rulebook}}></a>
+              <a class="fa fa-file text-blue-600 hover:text-blue-900" :href="item.rulebook" target="_blank"></a>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
               <button class="text-blue-600 hover:text-blue-900 mr-3">
                 <i class="fa fa-edit mr-1"></i>编辑
               </button>
-              <button class="text-green-600 hover:text-green-900 mr-3">
+              <!-- 详情按钮：使用命名路由跳转 -->
+              <button 
+                class="text-green-600 hover:text-green-900 mr-3"
+                @click="goToDetail(item.PPN)"
+              >
                 <i class="fa fa-eye mr-1"></i>详情
               </button>
               <button class="text-red-600 hover:text-red-900" @click="handleDelete(item.id)">
@@ -275,6 +276,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router' // 引入路由
+
+// 初始化路由实例
+const router = useRouter()
 
 // 分页相关状态
 const currentPage = ref(1)
@@ -284,15 +289,14 @@ const totalCount = ref(0)
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value))
 
 // 搜索筛选参数
-// 补充搜索参数定义（需要添加到原有searchParams中）
 const searchParams = ref({
-  // 保留原有其他参数...
-  model: '',               // 新增：型号
-  region: '',              // 新增：区域
-  storageStartTime: '',    // 新增：入库开始日期
-  storageEndTime: '',      // 新增：入库结束日期
-  analysisProgress: ''     // 新增：分析进度
-  // 可删除原有不再使用的参数：status, startTime, endTime等
+  model: '',               // 型号
+  brand: '',               // 品牌
+  category: '',            // 物料类别
+  region: '',              // 区域
+  storageStartTime: '',    // 入库开始日期
+  storageEndTime: '',      // 入库结束日期
+  analysisProgress: ''     // 分析进度
 })
 
 // 物料数据相关状态
@@ -343,7 +347,7 @@ const fetchMaterialData = async () => {
   }
 }
 
-// 重置搜索条件方法（需要同步更新）
+// 重置搜索条件方法
 const resetSearch = () => {
   searchParams.value = {
     model: '',
@@ -376,6 +380,14 @@ const handleDelete = (id) => {
   }
 }
 
+// 跳转到物料详情页（核心功能：使用命名路由匹配你的路由配置）
+const goToDetail = (ppn) => {
+  router.push({
+    name: 'ModelBasicInfo', // 直接使用路由配置中的name属性（最可靠）
+    query: { PPNID: ppn }   // 传递型号参数
+  })
+}
+
 // 页面挂载时初始化数据
 onMounted(() => {
   fetchMaterialData()
@@ -389,13 +401,7 @@ onMounted(() => {
 
 /* 确保日期输入框与品牌输入框的内边距和边框一致 */
 input[type="date"] {
-  /* 继承与品牌选择框相同的内边距和边框样式 */
   box-sizing: border-box;
-}
-
-/* 日期容器与品牌容器保持相同的水平约束 */
-div:has(input[type="date"]) {
-  /* 确保与上方品牌输入框的父容器拥有相同的布局约束 */
 }
 
 /* 表格单元格溢出处理优化 */

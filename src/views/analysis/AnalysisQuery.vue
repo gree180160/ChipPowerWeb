@@ -64,19 +64,19 @@
         </div>
         <div class="flex flex-col">
           <label class="text-sm text-gray-700 mb-1">得分范围</label>
-          <div class="flex items-center space-x-2">
+          <div class="flex items-center w-full space-x-2">
             <input
               v-model="searchParams.minScore"
               type="number"
               placeholder="最小值"
-              class="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1"
+              class="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1 min-w-0"
             />
-            <span class="text-gray-500">-</span>
+            <span class="text-gray-500 shrink-0">-</span>
             <input
               v-model="searchParams.maxScore"
               type="number"
               placeholder="最大值"
-              class="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1"
+              class="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1 min-w-0"
             />
           </div>
         </div>
@@ -165,7 +165,9 @@
             
             <!-- 物料数据列表 -->
             <tr v-else v-for="(item, index) in materialList" :key="item.model" class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.model }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <button class="text-blue-600 hover:text-blue-900 hover:underline font-medium" @click="handleViewDetail(item.model)">{{ item.model }}</button>
+            </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.brand }}</td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span
@@ -210,7 +212,7 @@
               
               <!-- 操作列 -->
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button class="text-blue-600 hover:text-blue-900 mr-3">
+                <button class="text-blue-600 hover:text-blue-900 mr-3" @click="handleViewDetail(item.model)">
                   <i class="fa fa-eye mr-1"></i>查看
                 </button>
               </td>
@@ -257,7 +259,15 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 import * as echarts from 'echarts';
+
+const router = useRouter();
+
+// 跳转到型号详情页
+const handleViewDetail = (model) => {
+  router.push(`/analysis/query/model/${encodeURIComponent(model)}`);
+};
 
 // 分页相关状态
 const currentPage = ref(1);

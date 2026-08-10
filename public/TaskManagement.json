@@ -10,7 +10,21 @@
         "endDate": "2023-12-31",
         "priority": 1,
         "status": "运行中",
-        "modelCount": 12
+        "modelCount": 12,
+        "models": [
+          { "model": "STM32F103C8T6", "brand": "ST", "status": "Active", "updateDate": "2024-01-15", "productCategory": "微控制器", "productSubCategory": "ARM Cortex-M3", "score": 85, "grade": "A", "hA": 92, "hL": 88, "sU": 95, "wW": 90, "wR": 87, "pR": 93, "inventoryTrend": [120, 115, 130, 145, 135, 150, 140, 160, 155, 170, 165, 180] },
+          { "model": "ESP32-WROOM-32", "brand": "Espressif", "status": "Active", "updateDate": "2024-01-14", "productCategory": "无线模块", "productSubCategory": "WiFi & 蓝牙", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [80, 85, 90, 85, 95, 100, 95, 110, 105, 120, 115, 130] },
+          { "model": "ATMEGA328P-PU", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-10", "productCategory": "微控制器", "productSubCategory": "AVR", "score": 78, "grade": "B", "hA": 85, "hL": 75, "sU": 82, "wW": 80, "wR": 76, "pR": 83, "inventoryTrend": [200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 90] },
+          { "model": "CC2650F128RGZR", "brand": "TI", "status": "Active", "updateDate": "2024-01-08", "productCategory": "无线MCU", "productSubCategory": "Bluetooth Low Energy", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105] },
+          { "model": "PIC16F877A-I/P", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-05", "productCategory": "微控制器", "productSubCategory": "PIC", "score": 82, "grade": "B+", "hA": 88, "hL": 80, "sU": 85, "wW": 83, "wR": 81, "pR": 86, "inventoryTrend": [150, 145, 140, 155, 150, 165, 160, 175, 170, 185, 180, 195] },
+          { "model": "STM32L432KC", "brand": "ST", "status": "Active", "updateDate": "2024-01-03", "productCategory": "微控制器", "productSubCategory": "ARM Cortex-M4", "score": 91, "grade": "A+", "hA": 94, "hL": 90, "sU": 92, "wW": 93, "wR": 89, "pR": 95, "inventoryTrend": [70, 75, 80, 75, 85, 90, 85, 95, 90, 100, 95, 105] },
+          { "model": "ESP8266EX", "brand": "Espressif", "status": "Active", "updateDate": "2023-12-30", "productCategory": "无线模块", "productSubCategory": "WiFi", "score": 88, "grade": "A", "hA": 90, "hL": 85, "sU": 87, "wW": 88, "wR": 84, "pR": 90, "inventoryTrend": [90, 85, 95, 90, 100, 95, 105, 100, 110, 105, 115, 110] },
+          { "model": "ATMEGA2560-16AU", "brand": "Microchip", "status": "Active", "updateDate": "2023-12-28", "productCategory": "微控制器", "productSubCategory": "AVR", "score": 80, "grade": "B", "hA": 86, "hL": 78, "sU": 83, "wW": 81, "wR": 77, "pR": 84, "inventoryTrend": [180, 170, 160, 175, 165, 180, 170, 190, 180, 200, 190, 210] },
+          { "model": "STM32F407VGT6", "brand": "ST", "status": "Active", "updateDate": "2023-12-25", "productCategory": "微控制器", "productSubCategory": "ARM Cortex-M4", "score": 93, "grade": "A+", "hA": 95, "hL": 92, "sU": 94, "wW": 95, "wR": 91, "pR": 96, "inventoryTrend": [60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115] },
+          { "model": "CC3200SF-LAUNCHXL", "brand": "TI", "status": "Active", "updateDate": "2023-12-20", "productCategory": "无线MCU", "productSubCategory": "WiFi", "score": 89, "grade": "A", "hA": 92, "hL": 88, "sU": 90, "wW": 91, "wR": 87, "pR": 92, "inventoryTrend": [40, 45, 50, 45, 55, 60, 55, 65, 60, 70, 65, 75] },
+          { "model": "NRF52832-QFAA", "brand": "NXP", "status": "Active", "updateDate": "2023-12-18", "productCategory": "无线MCU", "productSubCategory": "Bluetooth Low Energy", "score": 87, "grade": "A", "hA": 90, "hL": 86, "sU": 89, "wW": 88, "wR": 85, "pR": 91, "inventoryTrend": [110, 105, 115, 110, 120, 115, 125, 120, 130, 125, 135, 130] },
+          { "model": "MK64FN1M0VLL12", "brand": "NXP", "status": "Active", "updateDate": "2023-12-15", "productCategory": "微控制器", "productSubCategory": "ARM Cortex-M4", "score": 86, "grade": "A", "hA": 89, "hL": 85, "sU": 88, "wW": 87, "wR": 84, "pR": 90, "inventoryTrend": [95, 90, 100, 95, 105, 100, 110, 105, 115, 110, 120, 115] }
+        ]
       },
       {
         "taskId": "TSK20230002",
@@ -19,7 +33,17 @@
         "endDate": "2023-12-20",
         "priority": 2,
         "status": "未开始",
-        "modelCount": 8
+        "modelCount": 8,
+        "models": [
+          { "model": "IRF540N", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-12", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 76, "grade": "B", "hA": 82, "hL": 74, "sU": 80, "wW": 78, "wR": 72, "pR": 81, "inventoryTrend": [300, 280, 260, 240, 220, 200, 180, 160, 150, 140, 130, 120] },
+          { "model": "IGBT40N60", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-11", "productCategory": "功率器件", "productSubCategory": "IGBT", "score": 81, "grade": "B+", "hA": 87, "hL": 79, "sU": 84, "wW": 82, "wR": 78, "pR": 85, "inventoryTrend": [250, 240, 230, 220, 210, 200, 190, 180, 170, 160, 150, 140] },
+          { "model": "FDP65N06N", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-09", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 79, "grade": "B", "hA": 84, "hL": 76, "sU": 81, "wW": 79, "wR": 75, "pR": 83, "inventoryTrend": [180, 175, 170, 165, 160, 155, 150, 145, 140, 135, 130, 125] },
+          { "model": "IRF3205", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-07", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 83, "grade": "B+", "hA": 88, "hL": 81, "sU": 85, "wW": 84, "wR": 80, "pR": 87, "inventoryTrend": [220, 215, 210, 205, 200, 195, 190, 185, 180, 175, 170, 165] },
+          { "model": "IGBT20N40", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-05", "productCategory": "功率器件", "productSubCategory": "IGBT", "score": 77, "grade": "B", "hA": 83, "hL": 75, "sU": 79, "wW": 77, "wR": 73, "pR": 82, "inventoryTrend": [160, 155, 150, 145, 140, 135, 130, 125, 120, 115, 110, 105] },
+          { "model": "FQP30N06", "brand": "Infineon", "status": "Inactive", "updateDate": "2024-01-03", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 72, "grade": "C", "hA": 78, "hL": 70, "sU": 75, "wW": 73, "wR": 69, "pR": 77, "inventoryTrend": [80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25] },
+          { "model": "IGBT15N20", "brand": "Infineon", "status": "Active", "updateDate": "2023-12-28", "productCategory": "功率器件", "productSubCategory": "IGBT", "score": 84, "grade": "B+", "hA": 89, "hL": 82, "sU": 86, "wW": 85, "wR": 81, "pR": 88, "inventoryTrend": [140, 145, 150, 155, 160, 165, 170, 175, 180, 185, 190, 195] },
+          { "model": "IRFZ44N", "brand": "Infineon", "status": "Pending", "updateDate": "2023-12-20", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 70, "grade": "C", "hA": 76, "hL": 68, "sU": 73, "wW": 71, "wR": 67, "pR": 75, "inventoryTrend": [50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 5, 5] }
+        ]
       },
       {
         "taskId": "TSK20230003",
@@ -28,7 +52,24 @@
         "endDate": "2023-12-15",
         "priority": 1,
         "status": "已完成",
-        "modelCount": 15
+        "modelCount": 15,
+        "models": [
+          { "model": "LM358N", "brand": "TI", "status": "Active", "updateDate": "2024-01-18", "productCategory": "运算放大器", "productSubCategory": "双运放", "score": 94, "grade": "A+", "hA": 96, "hL": 93, "sU": 95, "wW": 96, "wR": 92, "pR": 97, "inventoryTrend": [200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310] },
+          { "model": "LM324N", "brand": "TI", "status": "Active", "updateDate": "2024-01-17", "productCategory": "运算放大器", "productSubCategory": "四运放", "score": 91, "grade": "A+", "hA": 94, "hL": 90, "sU": 92, "wW": 93, "wR": 89, "pR": 95, "inventoryTrend": [180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235] },
+          { "model": "NE555P", "brand": "TI", "status": "Active", "updateDate": "2024-01-16", "productCategory": "定时器", "productSubCategory": "单稳态", "score": 89, "grade": "A", "hA": 92, "hL": 88, "sU": 90, "wW": 91, "wR": 87, "pR": 93, "inventoryTrend": [160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215] },
+          { "model": "OPA2171IDR", "brand": "TI", "status": "Active", "updateDate": "2024-01-14", "productCategory": "运算放大器", "productSubCategory": "双运放", "score": 93, "grade": "A+", "hA": 95, "hL": 92, "sU": 94, "wW": 95, "wR": 91, "pR": 96, "inventoryTrend": [140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250] },
+          { "model": "LM317T", "brand": "TI", "status": "Active", "updateDate": "2024-01-12", "productCategory": "稳压器", "productSubCategory": "可调输出", "score": 88, "grade": "A", "hA": 91, "hL": 87, "sU": 89, "wW": 90, "wR": 86, "pR": 92, "inventoryTrend": [120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175] },
+          { "model": "CD4017BE", "brand": "TI", "status": "Active", "updateDate": "2024-01-10", "productCategory": "逻辑IC", "productSubCategory": "计数器", "score": 86, "grade": "A", "hA": 89, "hL": 85, "sU": 88, "wW": 87, "wR": 84, "pR": 90, "inventoryTrend": [100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155] },
+          { "model": "TLC555CP", "brand": "TI", "status": "Active", "updateDate": "2024-01-08", "productCategory": "定时器", "productSubCategory": "单稳态", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220] },
+          { "model": "LM339N", "brand": "TI", "status": "Active", "updateDate": "2024-01-06", "productCategory": "比较器", "productSubCategory": "四比较器", "score": 87, "grade": "A", "hA": 90, "hL": 86, "sU": 89, "wW": 88, "wR": 85, "pR": 91, "inventoryTrend": [90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145] },
+          { "model": "SN74HC595N", "brand": "TI", "status": "Active", "updateDate": "2024-01-04", "productCategory": "逻辑IC", "productSubCategory": "移位寄存器", "score": 85, "grade": "A", "hA": 88, "hL": 84, "sU": 87, "wW": 86, "wR": 83, "pR": 89, "inventoryTrend": [85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140] },
+          { "model": "OPA129IP", "brand": "TI", "status": "Active", "updateDate": "2024-01-02", "productCategory": "运算放大器", "productSubCategory": "精密运放", "score": 95, "grade": "A+", "hA": 97, "hL": 94, "sU": 96, "wW": 97, "wR": 93, "pR": 98, "inventoryTrend": [70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180] },
+          { "model": "LM386N-1", "brand": "TI", "status": "Inactive", "updateDate": "2023-12-28", "productCategory": "音频放大器", "productSubCategory": "D类功放", "score": 74, "grade": "C", "hA": 80, "hL": 72, "sU": 77, "wW": 75, "wR": 71, "pR": 79, "inventoryTrend": [60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5] },
+          { "model": "CD4069UBE", "brand": "TI", "status": "Active", "updateDate": "2023-12-25", "productCategory": "逻辑IC", "productSubCategory": "反相器", "score": 83, "grade": "B+", "hA": 87, "hL": 82, "sU": 86, "wW": 85, "wR": 81, "pR": 88, "inventoryTrend": [95, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140] },
+          { "model": "TPS5430", "brand": "TI", "status": "Active", "updateDate": "2023-12-22", "productCategory": "稳压器", "productSubCategory": "降压", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [75, 85, 95, 105, 115, 125, 135, 145, 155, 165, 175, 185] },
+          { "model": "SN74LS164N", "brand": "TI", "status": "Pending", "updateDate": "2023-12-18", "productCategory": "逻辑IC", "productSubCategory": "移位寄存器", "score": 78, "grade": "B", "hA": 83, "hL": 76, "sU": 81, "wW": 79, "wR": 75, "pR": 84, "inventoryTrend": [50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 5, 5] },
+          { "model": "LM4766", "brand": "TI", "status": "Active", "updateDate": "2023-12-15", "productCategory": "音频放大器", "productSubCategory": "D类功放", "score": 88, "grade": "A", "hA": 91, "hL": 87, "sU": 90, "wW": 89, "wR": 86, "pR": 92, "inventoryTrend": [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210] }
+        ]
       },
       {
         "taskId": "TSK20230004",
@@ -37,7 +78,18 @@
         "endDate": "2023-12-25",
         "priority": 3,
         "status": "运行中",
-        "modelCount": 9
+        "modelCount": 9,
+        "models": [
+          { "model": "AD7705", "brand": "ADI", "status": "Active", "updateDate": "2024-01-16", "productCategory": "模数转换器", "productSubCategory": "ADC", "score": 91, "grade": "A+", "hA": 94, "hL": 90, "sU": 92, "wW": 93, "wR": 89, "pR": 95, "inventoryTrend": [80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190] },
+          { "model": "AD8561", "brand": "ADI", "status": "Active", "updateDate": "2024-01-14", "productCategory": "运算放大器", "productSubCategory": "单运放", "score": 89, "grade": "A", "hA": 92, "hL": 88, "sU": 90, "wW": 91, "wR": 87, "pR": 93, "inventoryTrend": [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125] },
+          { "model": "AD620AN", "brand": "ADI", "status": "Active", "updateDate": "2024-01-12", "productCategory": "运算放大器", "productSubCategory": "仪表放大器", "score": 93, "grade": "A+", "hA": 95, "hL": 92, "sU": 94, "wW": 95, "wR": 91, "pR": 96, "inventoryTrend": [60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170] },
+          { "model": "AD7524", "brand": "ADI", "status": "Active", "updateDate": "2024-01-10", "productCategory": "数模转换器", "productSubCategory": "DAC", "score": 87, "grade": "A", "hA": 90, "hL": 86, "sU": 89, "wW": 88, "wR": 85, "pR": 91, "inventoryTrend": [55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110] },
+          { "model": "AD8250", "brand": "ADI", "status": "Active", "updateDate": "2024-01-08", "productCategory": "运算放大器", "productSubCategory": "仪表放大器", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130] },
+          { "model": "AD7799", "brand": "ADI", "status": "Active", "updateDate": "2024-01-06", "productCategory": "模数转换器", "productSubCategory": "ADC", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [65, 75, 85, 95, 105, 115, 125, 135, 145, 155, 165, 175] },
+          { "model": "AD8605", "brand": "ADI", "status": "Inactive", "updateDate": "2024-01-04", "productCategory": "运算放大器", "productSubCategory": "精密运放", "score": 76, "grade": "B", "hA": 82, "hL": 74, "sU": 80, "wW": 78, "wR": 72, "pR": 81, "inventoryTrend": [40, 35, 30, 25, 20, 15, 10, 5, 5, 5, 5, 5] },
+          { "model": "AD7321", "brand": "ADI", "status": "Active", "updateDate": "2023-12-30", "productCategory": "模数转换器", "productSubCategory": "ADC", "score": 88, "grade": "A", "hA": 91, "hL": 87, "sU": 90, "wW": 89, "wR": 86, "pR": 92, "inventoryTrend": [70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180] },
+          { "model": "AD8551", "brand": "ADI", "status": "Pending", "updateDate": "2023-12-20", "productCategory": "运算放大器", "productSubCategory": "零漂移运放", "score": 84, "grade": "B+", "hA": 88, "hL": 83, "sU": 87, "wW": 86, "wR": 82, "pR": 89, "inventoryTrend": [45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100] }
+        ]
       },
       {
         "taskId": "TSK20230005",
@@ -46,7 +98,20 @@
         "endDate": "2023-12-18",
         "priority": 2,
         "status": "已完成",
-        "modelCount": 11
+        "modelCount": 11,
+        "models": [
+          { "model": "LSM6DS3", "brand": "ST", "status": "Active", "updateDate": "2024-01-20", "productCategory": "传感器", "productSubCategory": "加速度计", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260] },
+          { "model": "LPS25HB", "brand": "ST", "status": "Active", "updateDate": "2024-01-18", "productCategory": "传感器", "productSubCategory": "气压传感器", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175] },
+          { "model": "HTS221", "brand": "ST", "status": "Active", "updateDate": "2024-01-16", "productCategory": "传感器", "productSubCategory": "温湿度传感器", "score": 89, "grade": "A", "hA": 92, "hL": 88, "sU": 90, "wW": 91, "wR": 87, "pR": 93, "inventoryTrend": [100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155] },
+          { "model": "VL53L0X", "brand": "ST", "status": "Active", "updateDate": "2024-01-14", "productCategory": "传感器", "productSubCategory": "激光测距", "score": 94, "grade": "A+", "hA": 96, "hL": 93, "sU": 95, "wW": 96, "wR": 92, "pR": 97, "inventoryTrend": [90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200] },
+          { "model": "LIS3DH", "brand": "ST", "status": "Active", "updateDate": "2024-01-12", "productCategory": "传感器", "productSubCategory": "加速度计", "score": 88, "grade": "A", "hA": 91, "hL": 87, "sU": 90, "wW": 89, "wR": 86, "pR": 92, "inventoryTrend": [110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165] },
+          { "model": "STTS751", "brand": "ST", "status": "Active", "updateDate": "2024-01-10", "productCategory": "传感器", "productSubCategory": "温度传感器", "score": 85, "grade": "A", "hA": 89, "hL": 84, "sU": 87, "wW": 86, "wR": 83, "pR": 90, "inventoryTrend": [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135] },
+          { "model": "LSM303DLHC", "brand": "ST", "status": "Active", "updateDate": "2024-01-08", "productCategory": "传感器", "productSubCategory": "电子罗盘", "score": 91, "grade": "A+", "hA": 94, "hL": 90, "sU": 92, "wW": 93, "wR": 89, "pR": 95, "inventoryTrend": [70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180] },
+          { "model": "IS25LP064", "brand": "ST", "status": "Active", "updateDate": "2024-01-06", "productCategory": "存储", "productSubCategory": "Flash", "score": 87, "grade": "A", "hA": 90, "hL": 86, "sU": 89, "wW": 88, "wR": 85, "pR": 91, "inventoryTrend": [60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115] },
+          { "model": "LIS2DS12", "brand": "ST", "status": "Inactive", "updateDate": "2024-01-04", "productCategory": "传感器", "productSubCategory": "加速度计", "score": 75, "grade": "C", "hA": 81, "hL": 73, "sU": 78, "wW": 76, "wR": 70, "pR": 80, "inventoryTrend": [50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 5, 5] },
+          { "model": "STM32F103C8T6", "brand": "ST", "status": "Active", "updateDate": "2024-01-02", "productCategory": "微控制器", "productSubCategory": "ARM Cortex-M3", "score": 85, "grade": "A", "hA": 92, "hL": 88, "sU": 95, "wW": 90, "wR": 87, "pR": 93, "inventoryTrend": [120, 115, 130, 145, 135, 150, 140, 160, 155, 170, 165, 180] },
+          { "model": "LSM6DSO", "brand": "ST", "status": "Pending", "updateDate": "2023-12-18", "productCategory": "传感器", "productSubCategory": "惯性测量单元", "score": 93, "grade": "A+", "hA": 95, "hL": 92, "sU": 94, "wW": 95, "wR": 91, "pR": 96, "inventoryTrend": [85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140] }
+        ]
       },
       {
         "taskId": "TSK20230006",
@@ -55,7 +120,16 @@
         "endDate": "2023-12-22",
         "priority": 1,
         "status": "未开始",
-        "modelCount": 7
+        "modelCount": 7,
+        "models": [
+          { "model": "XC7A35T", "brand": "Xilinx", "status": "Active", "updateDate": "2024-01-15", "productCategory": "FPGA", "productSubCategory": "Artix-7", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85] },
+          { "model": "XC7A75T", "brand": "Xilinx", "status": "Active", "updateDate": "2024-01-13", "productCategory": "FPGA", "productSubCategory": "Artix-7", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80] },
+          { "model": "XC7A100T", "brand": "Xilinx", "status": "Active", "updateDate": "2024-01-11", "productCategory": "FPGA", "productSubCategory": "Artix-7", "score": 93, "grade": "A+", "hA": 95, "hL": 92, "sU": 94, "wW": 95, "wR": 91, "pR": 96, "inventoryTrend": [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75] },
+          { "model": "XC6SLX25", "brand": "Xilinx", "status": "Active", "updateDate": "2024-01-09", "productCategory": "FPGA", "productSubCategory": "Spartan-6", "score": 85, "grade": "A", "hA": 88, "hL": 84, "sU": 87, "wW": 86, "wR": 83, "pR": 90, "inventoryTrend": [40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95] },
+          { "model": "XC7K325T", "brand": "Xilinx", "status": "Active", "updateDate": "2024-01-07", "productCategory": "FPGA", "productSubCategory": "Kintex-7", "score": 95, "grade": "A+", "hA": 97, "hL": 94, "sU": 96, "wW": 97, "wR": 93, "pR": 98, "inventoryTrend": [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70] },
+          { "model": "XC6LX9", "brand": "Xilinx", "status": "Inactive", "updateDate": "2024-01-05", "productCategory": "FPGA", "productSubCategory": "Spartan-6", "score": 72, "grade": "C", "hA": 78, "hL": 70, "sU": 75, "wW": 73, "wR": 69, "pR": 77, "inventoryTrend": [10, 8, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2] },
+          { "model": "XC7V2000T", "brand": "Xilinx", "status": "Pending", "updateDate": "2023-12-20", "productCategory": "FPGA", "productSubCategory": "Virtex-7", "score": 96, "grade": "A+", "hA": 98, "hL": 95, "sU": 97, "wW": 98, "wR": 94, "pR": 99, "inventoryTrend": [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60] }
+        ]
       },
       {
         "taskId": "TSK20230007",
@@ -64,7 +138,15 @@
         "endDate": "2023-12-10",
         "priority": 3,
         "status": "运行中",
-        "modelCount": 6
+        "modelCount": 6,
+        "models": [
+          { "model": "AT24C02", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-14", "productCategory": "存储", "productSubCategory": "EEPROM", "score": 86, "grade": "A", "hA": 89, "hL": 85, "sU": 88, "wW": 87, "wR": 84, "pR": 90, "inventoryTrend": [150, 155, 160, 165, 170, 175, 180, 185, 190, 195, 200, 205] },
+          { "model": "AT24C04", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-12", "productCategory": "存储", "productSubCategory": "EEPROM", "score": 88, "grade": "A", "hA": 91, "hL": 87, "sU": 90, "wW": 89, "wR": 86, "pR": 92, "inventoryTrend": [130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180, 185] },
+          { "model": "AT24C08", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-10", "productCategory": "存储", "productSubCategory": "EEPROM", "score": 89, "grade": "A", "hA": 92, "hL": 88, "sU": 91, "wW": 90, "wR": 87, "pR": 93, "inventoryTrend": [120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175] },
+          { "model": "AT24C16", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-08", "productCategory": "存储", "productSubCategory": "EEPROM", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210] },
+          { "model": "AT24C32", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-06", "productCategory": "存储", "productSubCategory": "EEPROM", "score": 91, "grade": "A+", "hA": 94, "hL": 90, "sU": 92, "wW": 93, "wR": 89, "pR": 95, "inventoryTrend": [80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190] },
+          { "model": "AT24C64", "brand": "Microchip", "status": "Active", "updateDate": "2024-01-04", "productCategory": "存储", "productSubCategory": "EEPROM", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170] }
+        ]
       },
       {
         "taskId": "TSK20230008",
@@ -73,7 +155,19 @@
         "endDate": "2023-12-28",
         "priority": 2,
         "status": "未开始",
-        "modelCount": 10
+        "modelCount": 10,
+        "models": [
+          { "model": "MFRC522", "brand": "NXP", "status": "Active", "updateDate": "2024-01-18", "productCategory": "RFID", "productSubCategory": "读写器", "score": 88, "grade": "A", "hA": 91, "hL": 87, "sU": 90, "wW": 89, "wR": 86, "pR": 92, "inventoryTrend": [200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310] },
+          { "model": "PN532", "brand": "NXP", "status": "Active", "updateDate": "2024-01-16", "productCategory": "RFID", "productSubCategory": "读写器", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235] },
+          { "model": "MFRC522V2", "brand": "NXP", "status": "Active", "updateDate": "2024-01-14", "productCategory": "RFID", "productSubCategory": "读写器", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215] },
+          { "model": "NTAG213", "brand": "NXP", "status": "Active", "updateDate": "2024-01-12", "productCategory": "RFID", "productSubCategory": "标签", "score": 87, "grade": "A", "hA": 90, "hL": 86, "sU": 89, "wW": 88, "wR": 85, "pR": 91, "inventoryTrend": [140, 145, 150, 155, 160, 165, 170, 175, 180, 185, 190, 195] },
+          { "model": "NTAG215", "brand": "NXP", "status": "Active", "updateDate": "2024-01-10", "productCategory": "RFID", "productSubCategory": "标签", "score": 89, "grade": "A", "hA": 92, "hL": 88, "sU": 91, "wW": 90, "wR": 87, "pR": 93, "inventoryTrend": [120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175] },
+          { "model": "MFRC630", "brand": "NXP", "status": "Active", "updateDate": "2024-01-08", "productCategory": "RFID", "productSubCategory": "读写器", "score": 91, "grade": "A+", "hA": 94, "hL": 90, "sU": 92, "wW": 93, "wR": 89, "pR": 95, "inventoryTrend": [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210] },
+          { "model": "NTAG424DNA", "brand": "NXP", "status": "Active", "updateDate": "2024-01-06", "productCategory": "RFID", "productSubCategory": "标签", "score": 93, "grade": "A+", "hA": 95, "hL": 92, "sU": 94, "wW": 95, "wR": 91, "pR": 96, "inventoryTrend": [80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190] },
+          { "model": "PN7150", "brand": "NXP", "status": "Inactive", "updateDate": "2024-01-04", "productCategory": "RFID", "productSubCategory": "读写器", "score": 74, "grade": "C", "hA": 80, "hL": 72, "sU": 77, "wW": 75, "wR": 71, "pR": 79, "inventoryTrend": [60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5] },
+          { "model": "MFRC523", "brand": "NXP", "status": "Active", "updateDate": "2023-12-28", "productCategory": "RFID", "productSubCategory": "读写器", "score": 85, "grade": "A", "hA": 88, "hL": 84, "sU": 87, "wW": 86, "wR": 83, "pR": 90, "inventoryTrend": [90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145] },
+          { "model": "NTAG216", "brand": "NXP", "status": "Pending", "updateDate": "2023-12-20", "productCategory": "RFID", "productSubCategory": "标签", "score": 94, "grade": "A+", "hA": 96, "hL": 93, "sU": 95, "wW": 96, "wR": 92, "pR": 97, "inventoryTrend": [70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180] }
+        ]
       },
       {
         "taskId": "TSK20230009",
@@ -82,7 +176,20 @@
         "endDate": "2023-12-16",
         "priority": 1,
         "status": "已完成",
-        "modelCount": 13
+        "modelCount": 13,
+        "models": [
+          { "model": "RX6210", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-20", "productCategory": "微控制器", "productSubCategory": "RX系列", "score": 91, "grade": "A+", "hA": 94, "hL": 90, "sU": 92, "wW": 93, "wR": 89, "pR": 95, "inventoryTrend": [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210] },
+          { "model": "RX72N", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-18", "productCategory": "微控制器", "productSubCategory": "RX系列", "score": 93, "grade": "A+", "hA": 95, "hL": 92, "sU": 94, "wW": 95, "wR": 91, "pR": 96, "inventoryTrend": [90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200] },
+          { "model": "RX231", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-16", "productCategory": "微控制器", "productSubCategory": "RX系列", "score": 88, "grade": "A", "hA": 91, "hL": 87, "sU": 90, "wW": 89, "wR": 86, "pR": 92, "inventoryTrend": [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135] },
+          { "model": "RX130", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-14", "productCategory": "微控制器", "productSubCategory": "RX系列", "score": 85, "grade": "A", "hA": 89, "hL": 84, "sU": 87, "wW": 86, "wR": 83, "pR": 90, "inventoryTrend": [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125] },
+          { "model": "RA2A1", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-12", "productCategory": "微控制器", "productSubCategory": "RA系列", "score": 90, "grade": "A", "hA": 93, "hL": 89, "sU": 91, "wW": 92, "wR": 88, "pR": 94, "inventoryTrend": [60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170] },
+          { "model": "RA4M2", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-10", "productCategory": "微控制器", "productSubCategory": "RA系列", "score": 89, "grade": "A", "hA": 92, "hL": 88, "sU": 91, "wW": 90, "wR": 87, "pR": 93, "inventoryTrend": [55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110] },
+          { "model": "RX65N", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-08", "productCategory": "微控制器", "productSubCategory": "RX系列", "score": 92, "grade": "A+", "hA": 95, "hL": 91, "sU": 93, "wW": 94, "wR": 90, "pR": 96, "inventoryTrend": [85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140] },
+          { "model": "RA6T2", "brand": "Renesas", "status": "Inactive", "updateDate": "2024-01-06", "productCategory": "微控制器", "productSubCategory": "RA系列", "score": 73, "grade": "C", "hA": 79, "hL": 71, "sU": 76, "wW": 74, "wR": 70, "pR": 78, "inventoryTrend": [40, 35, 30, 25, 20, 15, 10, 5, 5, 5, 5, 5] },
+          { "model": "RX72T", "brand": "Renesas", "status": "Active", "updateDate": "2024-01-04", "productCategory": "微控制器", "productSubCategory": "RX系列", "score": 94, "grade": "A+", "hA": 96, "hL": 93, "sU": 95, "wW": 96, "wR": 92, "pR": 97, "inventoryTrend": [75, 85, 95, 105, 115, 125, 135, 145, 155, 165, 175, 185] },
+          { "model": "RA2E1", "brand": "Renesas", "status": "Active", "updateDate": "2023-12-28", "productCategory": "微控制器", "productSubCategory": "RA系列", "score": 86, "grade": "A", "hA": 90, "hL": 85, "sU": 88, "wW": 87, "wR": 84, "pR": 91, "inventoryTrend": [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105] },
+          { "model": "RX113", "brand": "Renesas", "status": "Pending", "updateDate": "2023-12-20", "productCategory": "微控制器", "productSubCategory": "RX系列", "score": 82, "grade": "B+", "hA": 86, "hL": 81, "sU": 85, "wW": 84, "wR": 80, "pR": 87, "inventoryTrend": [45, 40, 35, 30, 25, 20, 15, 10, 5, 5, 5, 5] }
+        ]
       },
       {
         "taskId": "TSK20230010",
@@ -91,8 +198,17 @@
         "endDate": "2023-12-30",
         "priority": 3,
         "status": "运行中",
-        "modelCount": 5
+        "modelCount": 5,
+        "models": [
+          { "model": "IRF540N", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-18", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 76, "grade": "B", "hA": 82, "hL": 74, "sU": 80, "wW": 78, "wR": 72, "pR": 81, "inventoryTrend": [300, 280, 260, 240, 220, 200, 180, 160, 150, 140, 130, 120] },
+          { "model": "IGBT40N60", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-16", "productCategory": "功率器件", "productSubCategory": "IGBT", "score": 81, "grade": "B+", "hA": 87, "hL": 79, "sU": 84, "wW": 82, "wR": 78, "pR": 85, "inventoryTrend": [250, 240, 230, 220, 210, 200, 190, 180, 170, 160, 150, 140] },
+          { "model": "FDP65N06N", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-14", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 79, "grade": "B", "hA": 84, "hL": 76, "sU": 81, "wW": 79, "wR": 75, "pR": 83, "inventoryTrend": [180, 175, 170, 165, 160, 155, 150, 145, 140, 135, 130, 125] },
+          { "model": "IRF3205", "brand": "Infineon", "status": "Active", "updateDate": "2024-01-12", "productCategory": "功率器件", "productSubCategory": "MOSFET", "score": 83, "grade": "B+", "hA": 88, "hL": 81, "sU": 85, "wW": 84, "wR": 80, "pR": 87, "inventoryTrend": [220, 215, 210, 205, 200, 195, 190, 185, 180, 175, 170, 165] },
+          { "model": "IGBT20N40", "brand": "Infineon", "status": "Pending", "updateDate": "2023-12-20", "productCategory": "功率器件", "productSubCategory": "IGBT", "score": 77, "grade": "B", "hA": 83, "hL": 75, "sU": 79, "wW": 77, "wR": 73, "pR": 82, "inventoryTrend": [160, 155, 150, 145, 140, 135, 130, 125, 120, 115, 110, 105] }
+        ]
       }
     ],
+    "brandOptions": ["-all-", "ST", "Espressif", "Microchip", "TI", "NXP", "ADI", "Infineon", "Xilinx", "Renesas"],
+    "productCategoryOptions": ["-all-", "微控制器", "无线模块", "无线MCU", "传感器", "电源管理", "功率器件", "运算放大器", "定时器", "逻辑IC", "比较器", "存储", "FPGA", "RFID", "音频放大器", "稳压器", "模数转换器", "数模转换器"],
     "statusOptions": ["全部", "未开始", "运行中", "已完成", "已暂停", "已失败"]
   }

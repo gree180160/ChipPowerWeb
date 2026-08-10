@@ -201,7 +201,9 @@
             <template v-else>
               <tr v-for="(material, index) in materialList" :key="material.id"
                 class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ material.model }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <button class="text-blue-600 hover:text-blue-900 hover:underline font-medium" @click="handleViewDetail(material)">{{ material.model }}</button>
+              </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ material.brand }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -331,7 +333,10 @@
 
 <script setup>
 import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 import * as echarts from 'echarts';
+
+const router = useRouter();
 
 // 搜索表单数据
 const searchForm = ref({
@@ -644,7 +649,7 @@ const handleExportData = () => {
 
 // 查看详情
 const handleViewDetail = (material) => {
-  alert(`查看物料 ${material.model} 的详情`);
+  router.push(`/analysis/query/model/${encodeURIComponent(material.model)}`);
 };
 
 // 页面加载时获取数据

@@ -146,7 +146,11 @@
           </tr>
           <!-- 任务数据列表 -->
           <tr v-for="(item, index) in taskList" :key="item.taskId" class="hover:bg-gray-50 transition-colors">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.taskId }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <button class="text-blue-600 hover:text-blue-900 hover:underline font-medium" @click="handleViewDetail(item.taskId)">
+                {{ item.taskId }}
+              </button>
+            </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.taskName }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.uploadDate }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.endDate }}</td>
@@ -168,6 +172,9 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ item.modelCount }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-left">
+              <button class="text-blue-600 hover:text-blue-900 mr-5" @click="handleViewDetail(item.taskId)">
+                <i class="fa fa-eye"></i>查看
+              </button>
               <button class="text-blue-600 hover:text-blue-900 mr-5">
                 <i class="fa fa-pause"></i>暂停
               </button>
@@ -234,6 +241,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+// 跳转到任务详情页
+const handleViewDetail = (taskId) => {
+  router.push(`/analysis/task/${taskId}`);
+};
 
 // 分页相关状态
 const currentPage = ref(1);
