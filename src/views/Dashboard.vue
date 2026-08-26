@@ -84,7 +84,7 @@
                   class="block px-3 py-2 rounded-md text-sm"
                   :class="isActive('/analysis/task') ? 'bg-green-50 text-green-700' : 'text-gray-700 hover:bg-gray-100'"
                 >
-                  <i class="fa fa-tasks mr-2"></i>任务管理
+                  <i class="fa fa-tasks mr-2"></i>分析任务
                 </router-link>
               </li>
               <li>
@@ -184,13 +184,8 @@ const submenuOpen = ref({
 // 获取当前路由
 const route = useRoute()
 
-// 切换子菜单展开/收起
+// 切换子菜单展开/收起(不互斥,其他菜单保持之前的状态)
 const toggleSubmenu = (key) => {
-  // 关闭其他子菜单（实现互斥展开）
-  Object.keys(submenuOpen.value).forEach(k => {
-    if (k !== key) submenuOpen.value[k] = false
-  })
-  // 切换当前子菜单状态
   submenuOpen.value[key] = !submenuOpen.value[key]
 }
 
@@ -199,21 +194,16 @@ const isActive = (path) => {
   return route.path.startsWith(path)
 }
 
-// 监听路由变化，自动展开对应父菜单
+// 监听路由变化,自动展开对应父菜单(不影响其他已展开的菜单,保持各自状态)
 watch(route, (newRoute) => {
   const path = newRoute.path
-  // 根据当前路由自动展开对应的父菜单
+  // 根据当前路由自动展开对应的父菜单,进入其他页面时保持各菜单展开状态
   if (path.startsWith('/material')) {
     submenuOpen.value.material = true
   } else if (path.startsWith('/analysis')) {
     submenuOpen.value.analysis = true
   } else if (path.startsWith('/monitor')) {
     submenuOpen.value.monitor = true
-  } else {
-    // 关闭所有子菜单
-    Object.keys(submenuOpen.value).forEach(k => {
-      submenuOpen.value[k] = false
-    })
   }
 }, { immediate: true })
 </script>

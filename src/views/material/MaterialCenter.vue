@@ -327,18 +327,10 @@ const pageRange = computed(() => {
 // 模拟网络请求：获取物料数据
 const fetchMaterialData = async () => {
   try {
-    // 实际项目中可替换为后端API，携带分页和筛选参数
-    const response = await fetch('/MaterialCenter.json')
-    const data = await response.json()
-
-    // 赋值模拟数据（实际项目需根据接口返回结构调整）
-    materialList.value = data.materialList
-    totalCount.value = data.totalCount
-    categoryOptions.value = data.categoryOptions
-    brandOptions.value = data.brandOptions
-    statusOptions.value = data.statusOptions
-
-    // 同步目标页码
+    // TODO: 待接入 service 真实接口(原 /MaterialCenter.json 假数据已删除)
+    console.warn('MaterialCenter: 假数据已删除,待接入 service 真实接口')
+    materialList.value = []
+    totalCount.value = 0
     targetPage.value = currentPage.value
   } catch (error) {
     console.error('物料数据获取失败:', error)

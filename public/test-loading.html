@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>保存按钮 Loading 效果测试 - Mock</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Vue3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div id="app" class="p-6 max-w-4xl mx-auto">
+    <!-- 顶部说明 -->
+    <div class="mb-6 bg-blue-50 border border-blue-200 rounded-md p-4">
+      <h1 class="text-lg font-semibold text-blue-900 mb-2">
+        <i class="fa fa-flask mr-2"></i>保存按钮 Loading 效果测试(Mock)
+      </h1>
+      <p class="text-sm text-blue-700">
+        本页面使用 mock 数据,模拟任务详情页的保存流程。可调节"模拟请求耗时"观察 loading 效果。
+      </p>
+    </div>
+
+    <!-- 模拟控制面板 -->
+    <div class="mb-6 bg-white rounded-md shadow-sm p-5">
+      <h3 class="text-base font-semibold text-gray-900 mb-3 flex items-center">
+        <i class="fa fa-cog text-gray-500 mr-2"></i>Mock 控制台
+      </h3>
+      <div class="flex items-center space-x-4">
+        <label class="text-sm text-gray-700 whitespace-nowrap">模拟请求耗时(ms):</label>
+        <input
+          v-model.number="mockDelay"
+          type="number"
+          min="0"
+          step="100"
+          class="px-3 py-2 border border-gray-300 rounded-md text-sm w-32"
+        />
+        <span class="text-xs text-gray-500">{{ mockDelay <= 600 ? '会触发最小 600ms loading 补足' : 'loading 至少显示 ' + mockDelay + 'ms' }}</span>
+      </div>
+      <div class="mt-3 flex items-center space-x-4">
+        <label class="text-sm text-gray-700 whitespace-nowrap">模拟结果:</label>
+        <select v-model="mockResult" class="px-3 py-2 border border-gray-300 rounded-md text-sm">
+          <option value="success">成功</option>
+          <option value="fail">失败(测试失败路径 loading)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 任务信息卡片(复用真实页面结构) -->
+    <div class="bg-white rounded-md shadow-sm p-5 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+          <i class="fa fa-tasks text-blue-600 mr-2"></i>任务信息
+        </h3>
+        <div class="flex items-center space-x-2">
+          <!-- 显示模式:编辑按钮 -->
+          <button
+            v-if="!editing"
+            class="px-4 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 flex items-center"
+            @click="enterEdit"
+          >
+            <i class="fa fa-edit mr-1.5"></i>编辑
+          </button>
+          <!-- 编辑模式:取消 + 保存按钮 -->
+          <template v-else>
+            <button
+              class="px-4 py-1.5 border border-gray-300 rounded-md text-sm flex items-center"
+              :class="saving
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-white text-gray-700 hover:bg-gray-50'"
+              :disabled="saving"
+              @click="cancelEdit"
+            >
+              <i class="fa fa-times mr-1.5"></i>取消
+            </button>
+            <button
+              class="px-4 py-1.5 rounded-md text-sm flex items-center"
+              :class="saving
+                ? 'bg-green-400 text-white cursor-wait'
+                : 'bg-green-600 text-white hover:bg-green-700'"
+              :disabled="saving"
+              @click="saveTask"
+            >
+              <i :class="saving ? 'fa fa-spinner fa-spin mr-1.5' : 'fa fa-check mr-1.5'"></i>
+              {{ saving ? '保存中...' : '保存' }}
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <!-- 任务表单:label 与 input 同行 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
+        <!-- 任务名称(可编辑) -->
+        <div class="flex items-center">
+          <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">
+            <span class="text-red-500">*</span> 任务名称
+          </label>
+          <input
+            v-model="form.taskName"
+            type="text"
+            :disabled="!editing"
+            class="px-3 py-2 border rounded-md text-sm flex-1 min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            :class="editing
+              ? 'border-blue-400 bg-white text-gray-900'
+              : 'border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed'"
+          />
+        </div>
+
+        <!-- 任务编号(始终只读) -->
+        <div class="flex items-center">
+          <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">任务编号</label>
+          <input
+            :value="task.taskId"
+            type="text"
+            disabled
+            class="px-3 py-2 border border-gray-200 bg-gray-50 rounded-md text-sm flex-1 min-w-0 cursor-not-allowed text-gray-500"
+          />
+        </div>
+
+        <!-- 任务状态(可编辑) -->
+        <div class="flex items-center">
+          <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">任务状态</label>
+          <select
+            v-model="form.Tstate"
+            :disabled="!editing"
+            class="px-3 py-2 border rounded-md text-sm flex-1 min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            :class="editing
+              ? 'border-blue-400 bg-white text-gray-900'
+              : 'border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed'"
+          >
+            <option v-for="item in stateOptions" :key="item.value" :value="item.value">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- 任务优先级(可编辑) -->
+        <div class="flex items-center">
+          <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">任务优先级</label>
+          <select
+            v-model="form.Tlevel"
+            :disabled="!editing"
+            class="px-3 py-2 border rounded-md text-sm flex-1 min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            :class="editing
+              ? 'border-blue-400 bg-white text-gray-900'
+              : 'border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed'"
+          >
+            <option v-for="item in levelOptions" :key="item.value" :value="item.value">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- 上传日期(始终只读) -->
+        <div class="flex items-center">
+          <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">上传日期</label>
+          <input
+            :value="task.uploadDate"
+            type="text"
+            disabled
+            class="px-3 py-2 border border-gray-200 bg-gray-50 rounded-md text-sm flex-1 min-w-0 cursor-not-allowed text-gray-500"
+          />
+        </div>
+
+        <!-- 结束日期(可编辑) -->
+        <div class="flex items-center">
+          <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">结束日期</label>
+          <input
+            v-model="form.endDate"
+            type="date"
+            :disabled="!editing"
+            class="px-3 py-2 border rounded-md text-sm flex-1 min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            :class="editing
+              ? 'border-blue-400 bg-white text-gray-900'
+              : 'border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed'"
+          />
+        </div>
+
+        <!-- 任务描述(可编辑) -->
+        <div class="flex items-center md:col-span-2">
+          <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">任务描述</label>
+          <input
+            v-model="form.taskDesc"
+            type="text"
+            :disabled="!editing"
+            class="px-3 py-2 border rounded-md text-sm flex-1 min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            :class="editing
+              ? 'border-blue-400 bg-white text-gray-900'
+              : 'border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed'"
+            placeholder="请输入任务描述"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- 事件日志(展示 loading 时序) -->
+    <div class="bg-white rounded-md shadow-sm p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-semibold text-gray-900 flex items-center">
+          <i class="fa fa-terminal text-gray-500 mr-2"></i>事件日志
+        </h3>
+        <button
+          class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50"
+          @click="logs = []"
+        >
+          清空
+        </button>
+      </div>
+      <div class="bg-gray-900 rounded-md p-3 h-48 overflow-y-auto font-mono text-xs">
+        <div v-if="!logs.length" class="text-gray-500">暂无日志,点击保存按钮开始测试...</div>
+        <div v-for="(log, i) in logs" :key="i" class="mb-1">
+          <span class="text-gray-400">[{{ log.time }}]</span>
+          <span :class="{
+            'text-green-400': log.type === 'success',
+            'text-red-400': log.type === 'error',
+            'text-blue-400': log.type === 'info',
+            'text-yellow-400': log.type === 'loading'
+          }">{{ log.msg }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue
+
+    createApp({
+      setup() {
+        // ============ Mock 数据 ============
+        const task = ref({
+          taskId: 19,
+          taskName: 'TBomHot',
+          taskDesc: '正能量热门型号',
+          Tstate: 0,
+          Tlevel: 1,
+          uploadDate: '2026-08-19',
+          endDate: '-',
+        })
+
+        const form = ref({
+          taskName: 'TBomHot',
+          taskDesc: '正能量热门型号',
+          Tstate: 0,
+          Tlevel: 1,
+          endDate: '',
+        })
+
+        const stateOptions = [
+          { value: 0, label: '待处理' },
+          { value: 1, label: '进行中' },
+          { value: 2, label: '已完成' },
+          { value: 3, label: '已取消' },
+        ]
+        const levelOptions = [
+          { value: 1, label: '普通' },
+          { value: 2, label: '重要' },
+          { value: 3, label: '紧急' },
+        ]
+
+        const editing = ref(false)
+        const saving = ref(false)
+
+        // Mock 控制
+        const mockDelay = ref(2000)       // 模拟请求耗时(ms)
+        const mockResult = ref('success') // 'success' | 'fail'
+
+        // 日志
+        const logs = ref([])
+        const addLog = (msg, type = 'info') => {
+          const now = new Date()
+          const time = now.toTimeString().slice(0, 8) + '.' + String(now.getMilliseconds()).padStart(3, '0')
+          logs.value.push({ time, msg, type })
+        }
+
+        const enterEdit = () => {
+          form.value = {
+            taskName: task.value.taskName,
+            taskDesc: task.value.taskDesc,
+            Tstate: task.value.Tstate,
+            Tlevel: task.value.Tlevel,
+            endDate: task.value.endDate && task.value.endDate !== '-' ? task.value.endDate : '',
+          }
+          editing.value = true
+          addLog('进入编辑模式', 'info')
+        }
+
+        const cancelEdit = () => {
+          form.value = {
+            taskName: task.value.taskName,
+            taskDesc: task.value.taskDesc,
+            Tstate: task.value.Tstate,
+            Tlevel: task.value.Tlevel,
+            endDate: task.value.endDate && task.value.endDate !== '-' ? task.value.endDate : '',
+          }
+          editing.value = false
+          addLog('取消编辑,form 已还原', 'info')
+        }
+
+        // 模拟后端请求:返回 Promise,延迟 mockDelay 后 resolve/reject
+        const mockApiUpdate = () => new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (mockResult.value === 'success') {
+              resolve({ code: 200, message: '任务更新成功' })
+            } else {
+              reject(new Error('模拟服务端错误:数据库写入失败'))
+            }
+          }, mockDelay.value)
+        })
+
+        const saveTask = async () => {
+          if (!form.value.taskName.trim()) {
+            alert('任务名称不能为空')
+            return
+          }
+          if (saving.value) return
+          saving.value = true
+          addLog('saving = true,按钮进入 loading 状态', 'loading')
+
+          // 等待一帧,确保 loading 渲染到 DOM
+          await new Promise(r => requestAnimationFrame(r))
+          const startTime = Date.now()
+          const MIN_LOADING = 600
+
+          try {
+            addLog(`发起 mock 请求(耗时 ${mockDelay.value}ms)...`, 'info')
+            const resp = await mockApiUpdate()
+            if (resp.code !== 200) {
+              throw new Error(resp.message || '保存失败')
+            }
+
+            // 补足最小 loading 时长
+            const elapsed = Date.now() - startTime
+            if (elapsed < MIN_LOADING) {
+              const wait = MIN_LOADING - elapsed
+              addLog(`请求完成,补足 loading ${wait}ms(最小显示时长)`, 'loading')
+              await new Promise(r => setTimeout(r, wait))
+            }
+
+            // 更新本地数据
+            task.value.taskName = form.value.taskName
+            task.value.taskDesc = form.value.taskDesc
+            task.value.Tstate = form.value.Tstate
+            task.value.Tlevel = form.value.Tlevel
+            task.value.endDate = form.value.endDate || '-'
+            editing.value = false
+            addLog('保存成功,退出编辑模式', 'success')
+            alert('任务保存成功(Mock)')
+          } catch (e) {
+            const elapsed = Date.now() - startTime
+            if (elapsed < MIN_LOADING) {
+              await new Promise(r => setTimeout(r, MIN_LOADING - elapsed))
+            }
+            addLog(`保存失败: ${e.message}`, 'error')
+            alert(`保存失败: ${e.message}`)
+          } finally {
+            saving.value = false
+            addLog('saving = false,loading 结束', 'info')
+          }
+        }
+
+        return {
+          task, form, editing, saving,
+          stateOptions, levelOptions,
+          mockDelay, mockResult, logs,
+          enterEdit, cancelEdit, saveTask,
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>

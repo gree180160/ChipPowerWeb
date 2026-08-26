@@ -499,94 +499,10 @@ const fetchData = async () => {
   loading.value = true;
 
   try {
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    // 加载本地JSON数据
-    const response = await fetch('/MonitorPPNListData.json');
-
-    if (!response.ok) {
-      throw new Error(`数据加载失败: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // 模拟筛选逻辑
-    let filteredList = [...data.materialList];
-
-    if (searchForm.value.model) {
-      filteredList = filteredList.filter(item =>
-        item.model.includes(searchForm.value.model)
-      );
-    }
-
-    if (searchForm.value.brand) {
-      filteredList = filteredList.filter(item =>
-        item.brand === searchForm.value.brand
-      );
-    }
-
-    if (searchForm.value.productCategory) {
-      filteredList = filteredList.filter(item =>
-        item.productCategory === searchForm.value.productCategory
-      );
-    }
-
-    if (searchForm.value.startMonitorDate) {
-      filteredList = filteredList.filter(item =>
-        item.startMonitorDate === searchForm.value.startMonitorDate
-      );
-    }
-
-    if (searchForm.value.updateDate) {
-      filteredList = filteredList.filter(item =>
-        item.updateDate === searchForm.value.updateDate
-      );
-    }
-
-    if (searchForm.value.minScore) {
-      filteredList = filteredList.filter(item =>
-        item.score >= Number(searchForm.value.minScore)
-      );
-    }
-
-    if (searchForm.value.maxScore) {
-      filteredList = filteredList.filter(item =>
-        item.score <= Number(searchForm.value.maxScore)
-      );
-    }
-
-    if (searchForm.value.status) {
-      filteredList = filteredList.filter(item =>
-        item.status === searchForm.value.status
-      );
-    }
-
-    if (searchForm.value.materialLevel) {
-      filteredList = filteredList.filter(item =>
-        item.level === searchForm.value.materialLevel
-      );
-    }
-
-    if (searchForm.value.monitorTip) {
-      filteredList = filteredList.filter(item =>
-        item.monitorTip === searchForm.value.monitorTip
-      );
-    }
-
-    // 模拟分页处理
-    total.value = filteredList.length;
-    const startIndex = (currentPage.value - 1) * pageSize.value;
-    const endIndex = startIndex + pageSize.value;
-    materialList.value = filteredList.slice(startIndex, endIndex);
-
-    // 确保跳转页码在有效范围内
-    if (currentPage.value > totalPages.value) {
-      currentPage.value = totalPages.value || 1;
-    }
-
-    // 初始化图表
-    initCharts();
+    // TODO: 待接入 service 真实接口(原 /MonitorPPNListData.json 假数据已删除)
+    console.warn('MonitorQuery: 假数据已删除,待接入 service 真实接口');
+    materialList.value = [];
+    total.value = 0;
   } catch (error) {
     console.error('获取数据失败:', error);
     alert('数据加载失败，请稍后重试');

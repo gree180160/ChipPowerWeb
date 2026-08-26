@@ -23,7 +23,9 @@
               required
             />
           </div>
-          <button type="submit" class="login-button">登录</button>
+          <button type="submit" class="login-button" :disabled="loading">
+            {{ loading ? '登录中...' : '登录' }}
+          </button>
         </form>
       </div>
       <p class="copyright">2025 © 深圳市风菱电子有限公司</p>
@@ -43,30 +45,66 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const username = ref('')
 const password = ref('')
+const loading = ref(false)
 const router = useRouter()
 
-const testUsers = [
-  { username: 'admin', password: 'Calcitrapa0228' },
-  { username: 'river', password: 'Test1234' },
-  { username: 'alex', password: 'Test1234' },
-  { username: 'mark', password: 'Test1234' }
-]
+// API基础地址，根据环境配置
+const API_BASE_URL = 'http://localhost:8001/api/data'
 
-const handleLogin = () => {
+const handleLogin = async () => {
   if (!username.value || !password.value) {
     alert('请输入账号和密码')
     return
   }
-  const matched = testUsers.find(u => u.username === username.value && u.password === password.value)
-  if (matched) {
-    localStorage.setItem('token', 'valid-token')
-    localStorage.setItem('username', matched.username)
-    router.push('/')
-  } else {
-    alert('账号或密码错误，请使用测试账号登录')
+
+  if (loading.value) return
+  loading.value = true
+
+  try {
+    const response = await axios.post(`${API_BASE_URL}/user/login`, {
+      username: username.value,
+      password: password.value
+    }, {
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const result = response.data
+    if (result.code === 200 && result.data) {
+      // 登录成功，保存用户信息
+      localStorage.setItem('token', 'chip-power-token-' + Date.now())
+      localStorage.setItem('userId', result.data.id)
+      localStorage.setItem('username', result.data.username)
+      localStorage.setItem('role', result.data.role)
+      localStorage.setItem('lastLoginDate', result.data.last_login_date || '')
+      localStorage.setItem('createTime', result.data.create_time || '')
+      router.push('/')
+    } else {
+      alert(result.message || '登录失败')
+    }
+  } catch (error) {
+    console.error('登录错误:', error)
+    if (error.response) {
+      // 服务器返回错误状态码
+      if (error.response.status === 401) {
+        alert('账号或密码错误')
+      } else {
+        alert(error.response.data?.message || `登录失败 (${error.response.status})`)
+      }
+    } else if (error.request) {
+      // 请求发出但没有收到响应
+      alert('无法连接到服务器，请检查服务是否启动')
+    } else {
+      alert('登录失败：' + error.message)
+    }
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -151,6 +189,12 @@ html, body {
 
 .login-button:hover {
   background-color: #2d0a0a; /* 深黑色hover效果 */
+}
+
+.login-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* 版权信息：位于左侧区域底部，距离底部28px */

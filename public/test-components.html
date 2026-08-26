@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>通用组件测试 - LoadingButton / Pagination / PageLoading</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    /* 确保 SVG spinner 动画生效(覆盖 Tailwind animate-spin,提高优先级) */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .animate-spin { animation: spin 0.8s linear infinite !important; transform-origin: center; }
+    /* loading 时禁用按钮的透明度不要太低,避免看不见内容 */
+    button:disabled.opacity-60 { opacity: 0.75 !important; }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div id="app" class="p-6 max-w-5xl mx-auto">
+
+    <!-- 标题 -->
+    <div class="mb-6 bg-blue-50 border border-blue-200 rounded-md p-4">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <h1 class="text-lg font-semibold text-blue-900">
+            通用组件测试 - LoadingButton / Pagination / PageLoading
+          </h1>
+          <p class="text-sm text-blue-700 mt-1">使用纯 SVG + CSS 动画,不依赖 FontAwesome</p>
+        </div>
+        <!-- 返回上一个页面 -->
+        <button
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-700 bg-white border border-blue-300 rounded-md hover:bg-blue-100 transition-colors whitespace-nowrap"
+          @click="goBack"
+          title="返回上一个页面"
+        >
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7 7-7M3 12h18" />
+          </svg>
+          返回
+        </button>
+      </div>
+    </div>
+
+    <!-- ============ 1. LoadingButton 测试 ============ -->
+    <div class="bg-white rounded-md shadow-sm p-5 mb-6">
+      <h3 class="text-base font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs mr-2">1</span>
+        LoadingButton 通用按钮
+      </h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <loading-button
+          :loading="loading1"
+          text="保存"
+          loading-text="保存中..."
+          variant="success"
+          icon="fa fa-check"
+          @click="simulateClick(1, 2000)"
+        />
+        <loading-button
+          :loading="loading2"
+          text="提交"
+          loading-text="提交中..."
+          variant="primary"
+          @click="simulateClick(2, 1500)"
+        />
+        <loading-button
+          :loading="loading3"
+          text="删除"
+          loading-text="删除中..."
+          variant="danger"
+          @click="simulateClick(3, 1800)"
+        />
+        <loading-button
+          :loading="loading4"
+          text="警告操作"
+          loading-text="处理中..."
+          variant="warning"
+          @click="simulateClick(4, 1200)"
+        />
+        <loading-button
+          :loading="loading5"
+          text="默认按钮"
+          loading-text="加载中..."
+          variant="default"
+          @click="simulateClick(5, 1000)"
+        />
+      </div>
+      <p class="mt-3 text-xs text-gray-500">点击任意按钮,观察 loading 旋转图标(SVG)+ 文字变化。图标颜色随按钮配色走。</p>
+    </div>
+
+    <!-- ============ 2. Pagination 测试 ============ -->
+    <div class="bg-white rounded-md shadow-sm p-5 mb-6">
+      <h3 class="text-base font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs mr-2">2</span>
+        Pagination 分页控件
+      </h3>
+      <pagination
+        v-model="currentPage"
+        :total="totalItems"
+        :page-size="pageSize"
+        @change="onPageChange"
+      />
+      <div class="mt-4 p-3 bg-gray-50 rounded-md text-sm text-gray-600">
+        <p>当前页: <span class="font-semibold text-blue-600">{{ currentPage }}</span></p>
+        <p>每页: {{ pageSize }} 条,总: {{ totalItems }} 条,共 {{ Math.ceil(totalItems / pageSize) }} 页</p>
+        <p class="text-xs text-gray-500 mt-1">支持:首页 / 上一页 / 页码 / 下一页 / 尾页 / 跳转输入框</p>
+      </div>
+      <div class="mt-3 flex gap-3">
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50" @click="totalItems = 5">5条数据</button>
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50" @click="totalItems = 100">100条数据</button>
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50" @click="totalItems = 567">567条数据</button>
+      </div>
+    </div>
+
+    <!-- ============ 3. PageLoading 测试 ============ -->
+    <div class="bg-white rounded-md shadow-sm p-5 mb-6">
+      <h3 class="text-base font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs mr-2">3</span>
+        PageLoading 页面刷新 loading
+      </h3>
+      <div class="flex flex-wrap gap-4">
+        <button class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700" @click="showFullLoading(2500)">
+          整页 Loading(2.5s)
+        </button>
+        <button class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700" @click="showFullLoading(4000)">
+          整页 Loading(4s)
+        </button>
+      </div>
+      <p class="mt-3 text-xs text-gray-500">点击后整个页面被半透明遮罩覆盖,中央显示旋转图标和文字。</p>
+
+      <!-- 局部 loading 演示区 -->
+      <div class="mt-4 relative border border-gray-200 rounded-md p-8 bg-gray-50 min-h-[120px]">
+        <div class="text-center text-gray-500 text-sm">这是一个局部容器(相对定位)</div>
+        <div class="text-center mt-2">
+          <button class="px-3 py-1.5 bg-green-600 text-white rounded-md text-sm hover:bg-green-700" @click="showLocalLoading(2000)">
+            触发局部 Loading(2s)
+          </button>
+        </div>
+        <!-- 局部 loading -->
+        <page-loading
+          :visible="localLoading"
+          text="加载局部数据..."
+          scope="local"
+          size="md"
+        />
+      </div>
+    </div>
+
+    <!-- 事件日志 -->
+    <div class="bg-white rounded-md shadow-sm p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-semibold text-gray-900">事件日志</h3>
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50" @click="logs = []">清空</button>
+      </div>
+      <div class="bg-gray-900 rounded-md p-3 h-40 overflow-y-auto font-mono text-xs">
+        <div v-if="!logs.length" class="text-gray-500">暂无日志...</div>
+        <div v-for="(log, i) in logs" :key="i" class="mb-1">
+          <span class="text-gray-400">[{{ log.time }}]</span>
+          <span :class="{
+            'text-green-400': log.type === 'success',
+            'text-red-400': log.type === 'error',
+            'text-blue-400': log.type === 'info',
+            'text-yellow-400': log.type === 'loading'
+          }">{{ log.msg }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 整页 loading -->
+    <page-loading :visible="fullLoading" text="正在刷新页面数据..." size="lg" />
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue
+
+    // ============ LoadingButton 组件 ============
+    const LoadingButton = {
+      props: {
+        text: { type: String, default: '' },
+        loading: { type: Boolean, default: false },
+        loadingText: { type: String, default: '处理中...' },
+        type: { type: String, default: 'button' },
+        disabled: { type: Boolean, default: false },
+        variant: { type: String, default: 'primary' },
+        size: { type: String, default: 'md' },
+        icon: { type: String, default: '' },
+      },
+      emits: ['click'],
+      computed: {
+        sizeClass() {
+          const map = { sm: 'px-3 py-1 text-xs', md: 'px-4 py-1.5 text-sm', lg: 'px-5 py-2 text-base' }
+          return map[this.size] || map.md
+        },
+        iconSizeClass() {
+          const map = { sm: 'w-3 h-3', md: 'w-4 h-4', lg: 'w-5 h-5' }
+          return map[this.size] || map.md
+        },
+        variantClass() {
+          const map = {
+            primary: 'bg-blue-600 text-white hover:bg-blue-700',
+            success: 'bg-green-600 text-white hover:bg-green-700',
+            danger: 'bg-red-600 text-white hover:bg-red-700',
+            warning: 'bg-orange-500 text-white hover:bg-orange-600',
+            default: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50',
+          }
+          return map[this.variant] || map.primary
+        },
+      },
+      methods: {
+        handleClick(e) {
+          if (this.disabled || this.loading) return
+          this.$emit('click', e)
+        },
+      },
+      template: `
+        <button
+          :type="type"
+          :disabled="disabled || loading"
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none"
+          :class="[sizeClass, variantClass, (disabled || loading) ? 'cursor-not-allowed opacity-75' : 'cursor-pointer']"
+          @click="handleClick"
+        >
+          <svg v-if="loading" class="animate-spin mr-1.5" :class="iconSizeClass" viewBox="0 0 24 24" fill="none">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          <i v-else-if="icon" :class="['mr-1.5', icon]"></i>
+          <span>{{ loading ? loadingText : text }}</span>
+        </button>
+      `,
+    }
+
+    // ============ Pagination 组件 ============
+    const Pagination = {
+      props: {
+        modelValue: { type: Number, default: 1 },
+        total: { type: Number, default: 0 },
+        pageSize: { type: Number, default: 20 },
+        showJumper: { type: Boolean, default: true },
+        maxPageButtons: { type: Number, default: 5 },
+      },
+      emits: ['update:modelValue', 'change'],
+      data() { return { jumpValue: '' } },
+      computed: {
+        currentPage: {
+          get() { return this.modelValue },
+          set(v) { this.$emit('update:modelValue', v) },
+        },
+        totalPages() { return Math.max(1, Math.ceil(this.total / this.pageSize)) },
+        isFirstPage() { return this.currentPage <= 1 },
+        isLastPage() { return this.currentPage >= this.totalPages },
+        pageRange() {
+          const range = []
+          const maxShow = this.maxPageButtons
+          let start = Math.max(1, this.currentPage - Math.floor(maxShow / 2))
+          let end = start + maxShow - 1
+          if (end > this.totalPages) {
+            end = this.totalPages
+            start = Math.max(1, end - maxShow + 1)
+          }
+          if (start > 1) {
+            range.push(1)
+            if (start > 2) range.push('...')
+          }
+          for (let i = start; i <= end; i++) {
+            if (i !== 1 && i !== this.totalPages) range.push(i)
+          }
+          if (end < this.totalPages) {
+            if (end < this.totalPages - 1) range.push('...')
+            range.push(this.totalPages)
+          }
+          return range
+        },
+      },
+      methods: {
+        goTo(page) {
+          const target = Math.max(1, Math.min(this.totalPages, page))
+          if (target !== this.currentPage) {
+            this.currentPage = target
+            this.$emit('change', target)
+          }
+        },
+        handleJump() {
+          const p = parseInt(this.jumpValue, 10)
+          if (!isNaN(p) && p >= 1 && p <= this.totalPages) {
+            this.goTo(p)
+            this.jumpValue = ''
+          }
+        },
+      },
+      template: `
+        <div v-if="totalPages > 0" class="flex items-center justify-between flex-wrap gap-3">
+          <div class="text-sm text-gray-600">
+            共 <span class="font-semibold text-gray-900">{{ total }}</span> 条,
+            第 <span class="font-semibold text-gray-900">{{ currentPage }}</span> / {{ totalPages }} 页
+          </div>
+          <div class="flex items-center space-x-1">
+            <button class="px-3 py-1.5 text-sm border border-gray-300 rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              :class="isFirstPage ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-400 hover:text-blue-600'"
+              :disabled="isFirstPage" title="首页(第 1 页)" @click="goTo(1)">
+              <svg class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7M19 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button class="px-3 py-1.5 text-sm border border-gray-300 rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              :class="isFirstPage ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-400 hover:text-blue-600'"
+              :disabled="isFirstPage" title="上一页" @click="goTo(currentPage - 1)">
+              <svg class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <template v-for="p in pageRange" :key="p">
+              <span v-if="p === '...'" class="px-2 text-gray-400 select-none">…</span>
+              <button v-else class="min-w-[2rem] px-2 py-1.5 text-sm border rounded-md transition-colors"
+                :class="p === currentPage ? 'bg-blue-600 text-white border-blue-600 font-semibold' : 'bg-white text-gray-700 border-gray-300 hover:bg-blue-50 hover:border-blue-400 hover:text-blue-600'"
+                :title="'第 ' + p + ' 页'" @click="goTo(p)">{{ p }}</button>
+            </template>
+            <button class="px-3 py-1.5 text-sm border border-gray-300 rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              :class="isLastPage ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-400 hover:text-blue-600'"
+              :disabled="isLastPage" title="下一页" @click="goTo(currentPage + 1)">
+              <svg class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            <button class="px-3 py-1.5 text-sm border border-gray-300 rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              :class="isLastPage ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-400 hover:text-blue-600'"
+              :disabled="isLastPage" :title="'尾页(第 ' + totalPages + ' 页)'" @click="goTo(totalPages)">
+              <svg class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              </svg>
+            </button>
+            <div v-if="showJumper" class="flex items-center space-x-1 ml-2">
+              <span class="text-sm text-gray-500">跳至</span>
+              <input v-model.number="jumpValue" type="number" min="1" :max="totalPages"
+                class="w-14 px-2 py-1 text-sm border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-blue-400"
+                @keyup.enter="handleJump" />
+              <span class="text-sm text-gray-500">页</span>
+            </div>
+          </div>
+        </div>
+      `,
+    }
+
+    // ============ PageLoading 组件 ============
+    const PageLoading = {
+      props: {
+        visible: { type: Boolean, default: false },
+        text: { type: String, default: '加载中...' },
+        size: { type: String, default: 'md' },
+        scope: { type: String, default: 'full' },
+        textColor: { type: String, default: 'text-gray-600' },
+      },
+      computed: {
+        sizeClass() {
+          const map = { sm: 'w-6 h-6', md: 'w-10 h-10', lg: 'w-14 h-14' }
+          return map[this.size] || map.md
+        },
+        overlayClass() { return this.scope === 'local' ? 'absolute' : 'fixed' },
+      },
+      template: `
+        <div v-if="visible" class="flex items-center justify-center bg-white bg-opacity-70 backdrop-blur-sm"
+          :class="[overlayClass, scope === 'local' ? 'inset-0 z-10' : 'fixed inset-0 z-50']">
+          <div class="flex flex-col items-center">
+            <svg class="animate-spin text-blue-600" :class="sizeClass" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <p v-if="text" class="mt-3 text-sm font-medium" :class="textColor">{{ text }}</p>
+          </div>
+        </div>
+      `,
+    }
+
+    createApp({
+      components: { LoadingButton, Pagination, PageLoading },
+      setup() {
+        // LoadingButton 状态
+        const loading1 = ref(false)
+        const loading2 = ref(false)
+        const loading3 = ref(false)
+        const loading4 = ref(false)
+        const loading5 = ref(false)
+
+        // Pagination 状态
+        const currentPage = ref(1)
+        const totalItems = ref(100)
+        const pageSize = ref(20)
+
+        // PageLoading 状态
+        const fullLoading = ref(false)
+        const localLoading = ref(false)
+
+        // 日志
+        const logs = ref([])
+        const addLog = (msg, type = 'info') => {
+          const now = new Date()
+          const time = now.toTimeString().slice(0, 8) + '.' + String(now.getMilliseconds()).padStart(3, '0')
+          logs.value.push({ time, msg, type })
+        }
+
+        const simulateClick = (num, delay) => {
+          const loadingRef = { 1: loading1, 2: loading2, 3: loading3, 4: loading4, 5: loading5 }[num]
+          if (loadingRef.value) return
+          loadingRef.value = true
+          addLog(`按钮 ${num} 进入 loading`, 'loading')
+          setTimeout(() => {
+            loadingRef.value = false
+            addLog(`按钮 ${num} loading 结束`, 'success')
+          }, delay)
+        }
+
+        const onPageChange = (p) => {
+          addLog(`切换到第 ${p} 页`, 'info')
+        }
+
+        const showFullLoading = (delay) => {
+          fullLoading.value = true
+          addLog('显示整页 loading', 'loading')
+          setTimeout(() => {
+            fullLoading.value = false
+            addLog('整页 loading 关闭', 'success')
+          }, delay)
+        }
+
+        const showLocalLoading = (delay) => {
+          localLoading.value = true
+          addLog('显示局部 loading', 'loading')
+          setTimeout(() => {
+            localLoading.value = false
+            addLog('局部 loading 关闭', 'success')
+          }, delay)
+        }
+
+        // 返回上一个页面(无历史记录时 fallback 到首页)
+        const goBack = () => {
+          if (window.history.length > 1) {
+            addLog('返回上一个页面', 'info')
+            window.history.back()
+          } else {
+            // 直接打开测试页(无历史记录),fallback 到首页
+            addLog('无历史记录,跳转首页', 'info')
+            window.location.href = '/'
+          }
+        }
+
+        return {
+          loading1, loading2, loading3, loading4, loading5,
+          currentPage, totalItems, pageSize,
+          fullLoading, localLoading,
+          logs,
+          simulateClick, onPageChange, showFullLoading, showLocalLoading, goBack,
+        }
+      },
+    }).mount('#app')
+  </script>
+</body>
+</html>

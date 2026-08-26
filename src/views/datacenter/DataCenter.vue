@@ -132,26 +132,8 @@ const monitorTaskChart = ref(null)
 // 模拟网络请求获取数据
 const fetchData = async () => {
   try {
-    // 从 public 文件夹读取 JSON
-    const response = await fetch('/datacenter.json')
-    const data = await response.json()
-
-    // 赋值数据
-    materialTotal.value = data.materialTotal
-    materialTotalTrend.value = data.materialTotalTrend
-    analysisModelCount.value = data.analysisModelCount
-    analysisModelTrend.value = data.analysisModelTrend
-    supplyModelCount.value = data.supplyModelCount
-    supplyModelTrend.value = data.supplyModelTrend
-    materialLevelData.value = data.materialLevelDistribution
-    productCategoryData.value = data.productCategoryDistribution
-    brandDistributionData.value = data.brandDistributionTrend
-    materialAnalysisData.value = data.materialAnalysisProgress
-    analysisTaskData.value = data.analysisTaskStatus
-    monitorTaskData.value = data.monitorTaskStatus
-
-    // 初始化图表
-    initCharts()
+    // TODO: 待接入 service 真实接口(原 /datacenter.json 假数据已删除)
+    console.warn('DataCenter: 假数据已删除,待接入 service 真实接口')
   } catch (error) {
     console.error('数据获取失败:', error)
   }

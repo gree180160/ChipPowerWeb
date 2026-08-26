@@ -438,63 +438,13 @@ const fetchAnalysisData = async () => {
   loading.value = true;
   
   try {
-    // 模拟网络请求延迟
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // 尝试从JSON文件获取数据
-    let response;
-    try {
-      response = await fetch('/PPNAnalyData.json');
-    } catch (error) {
-      console.error('网络请求失败，使用模拟数据', error);
-      // 使用模拟数据
-      const mockData = generateMockData();
-      materialList.value = mockData.materialList;
-      totalCount.value = mockData.totalCount;
-      
-      // 等待DOM更新后初始化图表
-      nextTick(() => {
-        initCharts();
-      });
-      return;
-    }
-    
-    if (!response.ok) {
-      throw new Error(`HTTP错误，状态码: ${response.status}`);
-    }
-    
-    const data = await response.json();
-
-    // 验证数据结构
-    if (!data.materialList || !Array.isArray(data.materialList)) {
-      throw new Error('数据格式错误，缺少materialList数组');
-    }
-    
-    // 为缺少库存趋势数据的项添加默认数据
-    materialList.value = data.materialList.map(item => ({
-      ...item,
-      inventoryTrend: item.inventoryTrend || Array(12).fill(0).map(() => Math.floor(Math.random() * 100) + 50)
-    }));
-    totalCount.value = data.totalCount || data.materialList.length;
-    
-    // 等待DOM更新后初始化图表
-    nextTick(() => {
-      initCharts();
-    });
+    // TODO: 待接入 service 真实接口(原 /PPNAnalyData.json 假数据已删除)
+    console.warn('AnalysisQuery: 假数据已删除,待接入 service 真实接口');
+    materialList.value = [];
+    totalCount.value = 0;
   } catch (error) {
     console.error('获取分析数据失败:', error);
-    // 显示错误信息并使用模拟数据
-    alert(`数据加载失败: ${error.message}，将使用模拟数据`);
-    
-    // 生成模拟数据
-    const mockData = generateMockData();
-    materialList.value = mockData.materialList;
-    totalCount.value = mockData.totalCount;
-    
-    // 等待DOM更新后初始化图表
-    nextTick(() => {
-      initCharts();
-    });
+    alert(`数据加载失败: ${error.message}`);
   } finally {
     loading.value = false;
   }

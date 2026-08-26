@@ -286,20 +286,9 @@ export default {
   },
   methods: {
     async fetchMaterialInfo() {
-      try {
-        // 模拟网络请求，实际开发中替换为真实的API请求
-        const response = await fetch(`/ModelBasicInfo.json?PPNID=${this.PPNID}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        this.basicInfo = data;
-        // 初始化大图为默认图片
-        this.activeBigImage = data.image;
-      } catch (error) {
-        console.error('Error fetching material info:', error);
-        alert('获取物料详情失败，请重试！');
-      }
+      // TODO: 待接入 service 真实接口(原 /ModelBasicInfo.json 假数据已删除)
+      console.warn('ModelBasicInfo: 假数据已删除,待接入 service 真实接口');
+      alert('物料详情接口待接入 service');
     },
 
     // 功能1：点击小图切换大图
