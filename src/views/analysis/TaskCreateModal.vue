@@ -199,12 +199,13 @@ const form = reactive({
   taskKind: props.defaultKind,
 })
 
-// 状态映射:0待处理 1进行中 2已完成 3已取消
+// 状态映射:0待处理 1进行中 2已完成 3已取消 4简化版完成
 const stateOptions = [
   { value: 0, label: '待处理' },
   { value: 1, label: '进行中' },
   { value: 2, label: '已完成' },
   { value: 3, label: '已取消' },
+  { value: 4, label: '简化版完成' },
 ]
 
 // 优先级映射:1普通 2重要 3紧急

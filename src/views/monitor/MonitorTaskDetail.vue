@@ -170,40 +170,6 @@
       <div v-else class="py-8 text-center text-gray-500">
         <i class="fa fa-exclamation-circle mr-2"></i>未找到任务数据
       </div>
-
-      <!-- HQ 筛选(默认极值=灰=不筛;拨动离开极值=高亮;点"搜索"才把条件加入请求) -->
-      <div v-if="task" class="mt-4 pt-4 border-t border-gray-200 flex items-center gap-6 flex-wrap">
-        <!-- HQ_M_AV 筛选 范围 [50, 800] -->
-        <div class="flex items-center gap-2">
-          <span class="text-sm whitespace-nowrap" :class="mavActive ? 'text-blue-600 font-semibold' : 'text-gray-400'">HQ_M_AV ≥</span>
-          <span class="text-[10px] text-gray-400">50</span>
-          <input type="range" min="50" max="800" step="10" v-model.number="hqMavMin" class="w-32 accent-blue-600 cursor-pointer" :class="{ 'opacity-40': !mavActive }" />
-          <span class="text-[10px] text-gray-400">800</span>
-          <span class="text-sm font-bold w-10 text-right" :class="mavActive ? 'text-blue-600' : 'text-gray-400'">{{ hqMavMin }}</span>
-        </div>
-        <!-- HQ_SUP 筛选 范围 [2, 50] -->
-        <div class="flex items-center gap-2">
-          <span class="text-sm whitespace-nowrap" :class="supActive ? 'text-emerald-600 font-semibold' : 'text-gray-400'">HQ_SUP ≤</span>
-          <span class="text-[10px] text-gray-400">2</span>
-          <input type="range" min="2" max="50" step="1" v-model.number="hqSupMax" class="w-32 accent-emerald-600 cursor-pointer" :class="{ 'opacity-40': !supActive }" />
-          <span class="text-[10px] text-gray-400">50</span>
-          <span class="text-sm font-bold w-10 text-right" :class="supActive ? 'text-emerald-600' : 'text-gray-400'">{{ hqSupMax }}</span>
-        </div>
-        <!-- IC_SUP 筛选 范围 [2, 20] -->
-        <div class="flex items-center gap-2">
-          <span class="text-sm whitespace-nowrap" :class="icSupActive ? 'text-amber-600 font-semibold' : 'text-gray-400'">IC_SUP ≤</span>
-          <span class="text-[10px] text-gray-400">2</span>
-          <input type="range" min="2" max="20" step="1" v-model.number="icSupMax" class="w-32 accent-amber-600 cursor-pointer" :class="{ 'opacity-40': !icSupActive }" />
-          <span class="text-[10px] text-gray-400">20</span>
-          <span class="text-sm font-bold w-10 text-right" :class="icSupActive ? 'text-amber-600' : 'text-gray-400'">{{ icSupMax }}</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="px-3 py-1.5 bg-white border border-gray-300 text-gray-600 rounded-md text-sm hover:bg-gray-50" @click="resetFilter">重置</button>
-          <button class="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 flex items-center" @click="onFilterChange">
-            <i class="fa fa-search mr-1"></i>搜索
-          </button>
-        </div>
-      </div>
     </div>
 
     <!-- 关联 PPN 列表 -->
@@ -259,12 +225,10 @@
         <table class="min-w-full divide-y divide-gray-200 table-fixed">
           <colgroup>
             <col class="w-12" />   <!-- 复选框 -->
-            <col class="w-12" />   <!-- # -->
-            <col class="w-56" />   <!-- PPN -->
-            <col class="w-40" />   <!-- 品牌 -->
-            <col class="w-28" />   <!-- HQ_M_AV -->
-            <col class="w-28" />   <!-- HQ_SUP -->
-            <col class="w-32" />   <!-- 上传日期 -->
+            <col class="w-64" />   <!-- PPN -->
+            <col class="w-48" />   <!-- 品牌 -->
+            <col class="w-32" />   <!-- 库存变化 -->
+            <col class="w-32" />   <!-- 供应商数量变化 -->
             <col class="w-24" />   <!-- 操作 -->
           </colgroup>
           <thead class="bg-gray-50">
@@ -278,50 +242,21 @@
                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
               </th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">#</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">PPN</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">品牌</th>
-              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap cursor-pointer select-none hover:bg-gray-100" @click="toggleSort('hq_m_avg')">
-                <span class="flex items-center gap-1" :class="sortField === 'hq_m_avg' ? 'text-blue-600' : 'text-gray-500'">
-                  HQ_M_AV
-                  <i class="fa fa-sort text-xs" :class="getSortIconClass('hq_m_avg')"></i>
-                </span>
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap cursor-pointer select-none hover:bg-gray-100" @click="toggleSort('hq_sup_count')">
-                <span class="flex items-center gap-1" :class="sortField === 'hq_sup_count' ? 'text-emerald-600' : 'text-gray-500'">
-                  HQ_SUP
-                  <i class="fa fa-sort text-xs" :class="getSortIconClass('hq_sup_count')"></i>
-                </span>
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap cursor-pointer select-none hover:bg-gray-100" @click="toggleSort('hq_stock')">
-                <span class="flex items-center gap-1" :class="sortField === 'hq_stock' ? 'text-emerald-700' : 'text-gray-500'">
-                  HQ_STOCK
-                  <i class="fa fa-sort text-xs" :class="getSortIconClass('hq_stock')"></i>
-                </span>
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap cursor-pointer select-none hover:bg-gray-100" @click="toggleSort('ic_sup_count')">
-                <span class="flex items-center gap-1" :class="sortField === 'ic_sup_count' ? 'text-amber-600' : 'text-gray-500'">
-                  IC_SUP
-                  <i class="fa fa-sort text-xs" :class="getSortIconClass('ic_sup_count')"></i>
-                </span>
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap cursor-pointer select-none hover:bg-gray-100" @click="toggleSort('ic_stock')">
-                <span class="flex items-center gap-1" :class="sortField === 'ic_stock' ? 'text-amber-700' : 'text-gray-500'">
-                  IC_STOCK
-                  <i class="fa fa-sort text-xs" :class="getSortIconClass('ic_stock')"></i>
-                </span>
-              </th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">库存变化</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">供应商数量变化</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">操作</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr v-if="!ppnLoading && !pagedPpns.length">
-              <td colspan="9" class="px-4 py-8 text-center text-gray-500">
+              <td colspan="6" class="px-4 py-8 text-center text-gray-500">
                 <i class="fa fa-search-minus mr-2"></i>暂无关联 PPN,可点击右上角"新增 PPN"添加
               </td>
             </tr>
             <template v-else-if="!ppnLoading">
-            <tr v-for="(item, idx) in pagedPpns" :key="`${item.ppn}-${item.manu_name}`" class="hover:bg-gray-50">
+            <tr v-for="item in pagedPpns" :key="`${item.ppn}-${item.manu_name}`" class="hover:bg-gray-50">
               <td class="px-4 py-3 text-left">
                 <input
                   type="checkbox"
@@ -330,9 +265,6 @@
                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
               </td>
-              <td class="px-4 py-3 text-sm text-gray-500 text-left truncate">
-                {{ (currentPage - 1) * pageSize + idx + 1 }}
-              </td>
               <td class="px-4 py-3 text-sm text-left font-mono truncate" :title="item.ppn">
                 <a
                   class="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
@@ -340,11 +272,12 @@
                 >{{ item.ppn }}</a>
               </td>
               <td class="px-4 py-3 text-sm text-gray-600 text-left truncate" :title="item.manu_name">{{ item.manu_name || '-' }}</td>
-              <td class="px-4 py-3 text-sm text-left font-mono" :class="item.hq_m_avg > 0 ? 'text-indigo-600 font-medium' : 'text-gray-400'">{{ item.hq_m_avg > 0 ? item.hq_m_avg : '-' }}</td>
-              <td class="px-4 py-3 text-sm text-left font-mono" :class="item.hq_sup_count > 0 ? 'text-emerald-600 font-medium' : 'text-gray-400'">{{ item.hq_sup_count > 0 ? item.hq_sup_count : '-' }}</td>
-              <td class="px-4 py-3 text-sm text-left font-mono" :class="item.hq_stock > 0 ? 'text-emerald-700 font-medium' : 'text-gray-400'">{{ item.hq_stock > 0 ? item.hq_stock : '-' }}</td>
-              <td class="px-4 py-3 text-sm text-left font-mono" :class="item.ic_sup_count > 0 ? 'text-amber-600 font-medium' : 'text-gray-400'">{{ item.ic_sup_count > 0 ? item.ic_sup_count : '-' }}</td>
-              <td class="px-4 py-3 text-sm text-left font-mono" :class="item.ic_stock > 0 ? 'text-amber-700 font-medium' : 'text-gray-400'">{{ item.ic_stock > 0 ? item.ic_stock : '-' }}</td>
+              <td class="px-4 py-3 text-sm text-left font-mono font-bold" :class="stockChangeClass(item.stock_change)">
+                {{ formatStockChange(item.stock_change) }}
+              </td>
+              <td class="px-4 py-3 text-sm text-left font-mono font-bold" :class="stockChangeClass(item.supplier_change)">
+                {{ formatStockChange(item.supplier_change) }}
+              </td>
               <td class="px-4 py-3 text-sm font-medium text-left">
                 <button
                   class="text-red-600 hover:text-red-900"
@@ -359,7 +292,7 @@
         </table>
       </div>
 
-      <!-- 分页控件(后端分页,切页会重新请求) -->
+      <!-- 分页控件(前端分页,切页直接切片) -->
       <div v-if="ppnTotal > 0" class="flex items-center justify-between px-5 py-3 border-t border-gray-200">
         <div class="text-sm text-gray-500">
           显示 {{ (currentPage - 1) * pageSize + 1 }} 到 {{ Math.min(currentPage * pageSize, ppnTotal) }} 条,共 {{ ppnTotal }} 条 · 每页 {{ pageSize }} 条
@@ -465,6 +398,7 @@ const stateOptions = [
   { value: 1, label: '进行中' },
   { value: 2, label: '已完成' },
   { value: 3, label: '已取消' },
+  { value: 4, label: '简化版完成' },
 ]
 const levelOptions = [
   { value: 1, label: '普通' },
@@ -473,7 +407,7 @@ const levelOptions = [
 ]
 
 // ==================== PPN 列表 ====================
-const ppnList = ref([])  // [{ ppn, manu_id, manu_name, source, note, upload_date, hq_m_av, hq_sup }]
+const ppnList = ref([])  // [{ ppn, manu_id, manu_name, source, note, upload_date, stock_change }]
 const ppnLoading = ref(false)
 const ppnTotal = ref(0)  // 总记录数(由后端返回)
 const selectedPpns = ref([])  // 选中的 PPN(用于批量删除)
@@ -481,58 +415,30 @@ const selectedPpns = ref([])  // 选中的 PPN(用于批量删除)
 const showAddPpnModal = ref(false)
 const showUploadModal = ref(false)
 
-// PPN 分页:直接把 page/page_count 作为请求参数传给后端(避免 1 万条全量加载超时)
+// PPN 分页:列表为任务关联 PPN(t_ppn),全量拉取后前端分页
 const currentPage = ref(1)
 const pageSize = ref(50)  // 默认每页 50 条
 const totalPages = computed(() => Math.max(1, Math.ceil(ppnTotal.value / pageSize.value)))
 
-// HQ 筛选滑块(默认在极值=灰=不筛;拨动离开极值=高亮;点"搜索"才生效请求)
-// HQ_M_AV 范围 [50, 800], 默认 50(极小值)= 灰,不筛
-// HQ_SUP  范围 [2, 50],  默认 50(极大值)= 灰,不筛
-// IC_SUP  范围 [2, 20],  默认 20(极大值)= 灰,不筛
-const hqMavMin = ref(50)
-const hqSupMax = ref(50)
-const icSupMax = ref(20)
-const mavActive = computed(() => hqMavMin.value > 50)
-const supActive = computed(() => hqSupMax.value < 50)
-const icSupActive = computed(() => icSupMax.value < 20)
+// 当前页数据(前端分页切片)
+const pagedPpns = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return ppnList.value.slice(start, start + pageSize.value)
+})
 
-// 表头排序(三态:不排序 → 升序 → 降序 → 不排序)
-const sortField = ref('')
-const sortOrder = ref('')  // '' 表示不排序
-
-const toggleSort = (field) => {
-  if (sortField.value !== field) {
-    // 切换到新字段,默认降序
-    sortField.value = field
-    sortOrder.value = 'desc'
-  } else {
-    // 三态循环: desc → asc → 空(不排序) → desc
-    if (sortOrder.value === 'desc') {
-      sortOrder.value = 'asc'
-    } else if (sortOrder.value === 'asc') {
-      sortField.value = ''
-      sortOrder.value = ''
-    } else {
-      sortOrder.value = 'desc'
-    }
-  }
-  currentPage.value = 1
-  fetchPpns()
+// 库存变化展示:正数 +N(增),负数 -N(减),0 显示 0,无数据(仅有单日或无记录)显示 --
+const formatStockChange = (v) => {
+  if (v === null || v === undefined) return '--'
+  if (v > 0) return `+${v}`
+  if (v < 0) return String(v)
+  return '0'
 }
-
-const getSortIconClass = (field) => {
-  if (sortField.value !== field || !sortOrder.value) {
-    return 'text-gray-300'
-  }
-  if (sortOrder.value === 'asc') {
-    return 'text-blue-500 fa-sort-asc'
-  }
-  return 'text-blue-500 fa-sort-desc'
+const stockChangeClass = (v) => {
+  if (v === null || v === undefined) return 'text-gray-400'
+  if (v > 0) return 'text-emerald-600'
+  if (v < 0) return 'text-red-600'
+  return 'text-gray-500'
 }
-
-// 后端已分页返回,直接用 ppnList 作为当前页内容
-const pagedPpns = computed(() => ppnList.value)
 
 const pageRange = computed(() => {
   const range = []
@@ -602,43 +508,48 @@ const fetchPpns = async () => {
   }
   ppnLoading.value = true
   try {
-    const resp = await axios.get(`${API_BASE_URL}/ppn/with_hq`, {
-      params: {
-        filter_contend: `task_name = "${task.value.taskName}"`,
-        page: currentPage.value,
-        page_count: pageSize.value,
-        // HQ 筛选:滑块离开极值才传参(默认极值=不筛=显示全部)
-        ...(hqMavMin.value > 50 ? { hq_m_av_min: hqMavMin.value } : {}),
-        ...(hqSupMax.value < 50 ? { hq_sup_max: hqSupMax.value } : {}),
-        ...(icSupMax.value < 20 ? { ic_sup_max: icSupMax.value } : {}),
-        // 排序参数:有 sortField 才传
-        ...(sortField.value ? { sort_field: sortField.value, sort_order: sortOrder.value } : {}),
-      },
+    // 1. 任务关联的 PPN 列表(t_ppn, source = 任务名)
+    const resp = await axios.get(`${API_BASE_URL}/ppn/read`, {
+      params: { filter_contend: `source = "${task.value.taskName}"` },
       timeout: 30000,
     })
     if (resp.data?.code !== 200) {
-      throw new Error(resp.data?.message || 'ppn/with_hq 失败')
+      throw new Error(resp.data?.message || 'ppn/read 失败')
     }
-    // 新格式:后端返回对象列表
-    ppnList.value = (resp.data.data || []).map(r => ({
-      ppn: r.ppn,
-      manu_name: r.manu_name || '',
-      task_name: r.task_name || '',
-      digikey_status: r.digikey_status || '',
-      hq_m_avg: r.hq_m_avg ?? 0,
-      hq_sup_count: r.hq_sup_count ?? 0,
-      hq_stock: r.hq_stock ?? 0,
-      ic_sup_count: r.ic_sup_count ?? 0,
-      ic_stock: r.ic_stock ?? 0,
-      efind_all_sup: r.efind_all_sup ?? 0,
-      wheat_global: r.wheat_global ?? 0,
-      wheat_ru: r.wheat_ru ?? 0,
-      oc_price: r.oc_price ?? null,
-      oc_stock: r.oc_stock ?? 0,
+    // 返回字段顺序: ppn, manu_id, manu_name, source, note, upload_date
+    const rows = resp.data.data || []
+    const ppns = rows.map(r => ({
+      ppn: r[0],
+      manu_id: r[1],
+      manu_name: r[2] || '',
+      source: r[3] || '',
+      note: r[4] || '',
+      upload_date: r[5] || '',
     }))
-    // 后端返回 total(总记录数);不传 page_count 时 total=len(data)
-    ppnTotal.value = resp.data.total ?? ppnList.value.length
-    // 首次加载或刷新时回到第 1 页(但如果用户手动切页再刷新,则保持当前页)
+
+    // 2. 计算每个 PPN 的库存变化与供应商数量变化(monitor_ic: 最新 m_date 与次新 m_date 之差)
+    let changeMap = {}
+    if (ppns.length) {
+      const scResp = await axios.post(
+        `${API_BASE_URL}/monitor_ic/stock_change`,
+        { ppns: ppns.map(p => p.ppn) },
+        { timeout: 30000 }
+      )
+      if (scResp.data?.code === 200) {
+        changeMap = scResp.data.data || {}
+      }
+    }
+    ppnList.value = ppns.map(p => {
+      const chg = changeMap[p.ppn]
+      return {
+        ...p,
+        stock_change: chg ? chg.stock_change : null,
+        supplier_change: chg ? chg.supplier_change : null,
+      }
+    })
+    ppnTotal.value = ppnList.value.length
+    // 数据量变化后修正当前页
+    if (currentPage.value > totalPages.value) currentPage.value = 1
     selectedPpns.value = []
   } catch (e) {
     console.error('加载 PPN 列表失败:', e)
@@ -656,27 +567,10 @@ const loadAll = async () => {
   await fetchPpns()
 }
 
-// 手动切页 → 后端分页:重新请求当前页数据
-const goToPage = async (p) => {
+// 手动切页 → 前端分页,直接切片展示
+const goToPage = (p) => {
   if (p < 1 || p > totalPages.value || p === currentPage.value) return
   currentPage.value = p
-  await fetchPpns()
-}
-
-// HQ 滑块筛选改变(点搜索按钮)→ 回到第 1 页重新请求
-const onFilterChange = async () => {
-  currentPage.value = 1
-  await fetchPpns()
-}
-
-// 重置筛选(滑块回极值=灰=不筛,清空排序,重新加载全部)
-const resetFilter = () => {
-  hqMavMin.value = 50
-  hqSupMax.value = 50
-  icSupMax.value = 20
-  sortField.value = ''
-  sortOrder.value = ''
-  onFilterChange()
 }
 
 // ==================== 任务编辑 ====================
@@ -937,10 +831,10 @@ const goBack = () => {
   router.push('/monitor/task')
 }
 
-// 跳转到 PPN 分析结果详情页(复用 ModelData 页面)
+// 跳转到 PPN 供应商库存监控详情页
 const goToPpnDetail = (ppn) => {
   if (!ppn) return
-  router.push(`/analysis/query/model/${encodeURIComponent(ppn)}`)
+  router.push(`/monitor/ppn/${encodeURIComponent(ppn)}`)
 }
 
 onMounted(() => {

@@ -125,14 +125,17 @@
           </select>
         </div>
 
-        <!-- 上传日期(始终只读) -->
+        <!-- 上传日期(可编辑) -->
         <div class="flex items-center">
           <label class="text-sm text-gray-700 text-left whitespace-nowrap w-24 shrink-0">上传日期</label>
           <input
-            :value="task.uploadDate"
-            type="text"
-            disabled
-            class="px-3 py-2 border border-gray-200 bg-gray-50 rounded-md text-sm flex-1 min-w-0 cursor-not-allowed text-gray-500"
+            v-model="form.uploadDate"
+            type="date"
+            :disabled="!editing"
+            class="px-3 py-2 border rounded-md text-sm flex-1 min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            :class="editing
+              ? 'border-blue-400 bg-white text-gray-900'
+              : 'border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed'"
           />
         </div>
 
@@ -171,8 +174,8 @@
         <i class="fa fa-exclamation-circle mr-2"></i>未找到任务数据
       </div>
 
-      <!-- HQ 筛选(默认极值=灰=不筛;拨动离开极值=高亮;点"搜索"才把条件加入请求) -->
-      <div v-if="task" class="mt-4 pt-4 border-t border-gray-200 flex items-center gap-6 flex-wrap">
+      <!-- HQ 筛选(默认极值=灰=不筛;拨动离开极值=高亮;点"搜索"才把条件加入请求) 仅已完成/简化版完成 任务显示指标筛选 -->
+      <div v-if="task && isResultBased" class="mt-4 pt-4 border-t border-gray-200 flex items-center gap-6 flex-wrap">
         <!-- HQ_M_AV 筛选 范围 [50, 800] -->
         <div class="flex items-center gap-2">
           <span class="text-sm whitespace-nowrap" :class="mavActive ? 'text-blue-600 font-semibold' : 'text-gray-400'">HQ_M_AV ≥</span>
@@ -331,7 +334,9 @@
                 />
               </td>
               <td class="px-4 py-3 text-left">
+                <!-- 仅 t_ppn_result(已完成/简化版完成) 支持收藏 -->
                 <button
+                  v-if="item.fromResult && item.id"
                   class="inline-flex items-center justify-center w-7 h-7 rounded-md focus:outline-none focus:ring-0 transition-colors duration-150"
                   :class="isCollected(item.id)
                     ? 'text-amber-500 bg-amber-50'
@@ -473,6 +478,7 @@ const form = ref({
   taskDesc: '',
   Tstate: 0,
   Tlevel: 1,
+  uploadDate: '',
   endDate: '',
 })
 
@@ -482,6 +488,7 @@ const stateOptions = [
   { value: 1, label: '进行中' },
   { value: 2, label: '已完成' },
   { value: 3, label: '已取消' },
+  { value: 4, label: '简化版完成' },
 ]
 const levelOptions = [
   { value: 1, label: '普通' },
@@ -494,6 +501,13 @@ const ppnList = ref([])  // [{ ppn, manu_id, manu_name, source, note, upload_dat
 const ppnLoading = ref(false)
 const ppnTotal = ref(0)  // 总记录数(由后端返回)
 const selectedPpns = ref([])  // 选中的 PPN(用于批量删除)
+
+// PPN 数据来源:已完成/简化版完成(2/4) 从 t_ppn_result(with_hq) 取;其他状态从 t_ppn 取
+const ppnSrc = ref('result')  // 'result' => t_ppn_result, 'ppn' => t_ppn
+// 任务是否已完成(2 已完成 / 4 简化版完成)→ 决定 PPN 数据来源与是否显示指标筛选
+const isResultBased = computed(() =>
+  task.value && (task.value.Tstate === 2 || task.value.Tstate === 4)
+)
 
 const showAddPpnModal = ref(false)
 const showUploadModal = ref(false)
@@ -567,8 +581,14 @@ const getSortIconClass = (field) => {
   return 'text-blue-500 fa-sort-desc'  // 降序
 }
 
-// 后端已分页返回,直接用 ppnList 作为当前页内容
-const pagedPpns = computed(() => ppnList.value)
+// 当前页展示数据:t_ppn_result 已由后端分页返回;t_ppn 全量返回,前端分页
+const pagedPpns = computed(() => {
+  if (ppnSrc.value === 'ppn') {
+    const start = (currentPage.value - 1) * pageSize.value
+    return ppnList.value.slice(start, start + pageSize.value)
+  }
+  return ppnList.value
+})
 
 const pageRange = computed(() => {
   const range = []
@@ -620,6 +640,7 @@ const fetchTask = async () => {
       taskDesc: task.value.taskDesc,
       Tstate: task.value.Tstate,
       Tlevel: task.value.Tlevel,
+      uploadDate: task.value.uploadDate && task.value.uploadDate !== '-' ? task.value.uploadDate : '',
       endDate: task.value.endDate && task.value.endDate !== '-' ? task.value.endDate : '',
     }
   } catch (e) {
@@ -638,43 +659,75 @@ const fetchPpns = async () => {
   }
   ppnLoading.value = true
   try {
-    const resp = await axios.get(`${API_BASE_URL}/ppn/with_hq`, {
-      params: {
-        filter_contend: `task_name = "${task.value.taskName}"`,
-        page: currentPage.value,
-        page_count: pageSize.value,  // 传 page_count 启用后端分页,避免 1 万条全量加载超时
-        // HQ 筛选:滑块离开极值才传参(默认极值=不筛=显示全部)
-        ...(hqMavMin.value > 50 ? { hq_m_av_min: hqMavMin.value } : {}),
-        ...(hqSupMax.value < 50 ? { hq_sup_max: hqSupMax.value } : {}),
-        ...(icSupMax.value < 20 ? { ic_sup_max: icSupMax.value } : {}),
-        // 排序参数:有 sortField 才传
-        ...(sortField.value ? { sort_field: sortField.value, sort_order: sortOrder.value } : {}),
-      },
-      timeout: 30000,
-    })
-    if (resp.data?.code !== 200) {
-      throw new Error(resp.data?.message || 'ppn/with_hq 失败')
+    // 已完成/简化版完成(2/4)→ 从 t_ppn_result(with_hq) 取(含指标);其他状态 → 从 t_ppn 取
+    if (isResultBased.value) {
+      ppnSrc.value = 'result'
+      const resp = await axios.get(`${API_BASE_URL}/ppn/with_hq`, {
+        params: {
+          filter_contend: `task_name = "${task.value.taskName}"`,
+          page: currentPage.value,
+          page_count: pageSize.value,  // 传 page_count 启用后端分页,避免 1 万条全量加载超时
+          // HQ 筛选:滑块离开极值才传参(默认极值=不筛=显示全部)
+          ...(hqMavMin.value > 50 ? { hq_m_av_min: hqMavMin.value } : {}),
+          ...(hqSupMax.value < 50 ? { hq_sup_max: hqSupMax.value } : {}),
+          ...(icSupMax.value < 20 ? { ic_sup_max: icSupMax.value } : {}),
+          // 排序参数:有 sortField 才传
+          ...(sortField.value ? { sort_field: sortField.value, sort_order: sortOrder.value } : {}),
+        },
+        timeout: 30000,
+      })
+      if (resp.data?.code !== 200) {
+        throw new Error(resp.data?.message || 'ppn/with_hq 失败')
+      }
+      // 新格式:后端返回对象列表(含 id 字段用于收藏定位)
+      ppnList.value = (resp.data.data || []).map(r => ({
+        id: r.id,  // t_ppn_result 主键,收藏功能定位记录用
+        ppn: r.ppn,
+        manu_name: r.manu_name || '',
+        task_name: r.task_name || '',
+        digikey_status: r.digikey_status || '',
+        hq_m_avg: r.hq_m_avg ?? 0,
+        hq_sup_count: r.hq_sup_count ?? 0,
+        hq_stock: r.hq_stock ?? 0,
+        ic_sup_count: r.ic_sup_count ?? 0,
+        ic_stock: r.ic_stock ?? 0,
+        efind_all_sup: r.efind_all_sup ?? 0,
+        wheat_global: r.wheat_global ?? 0,
+        wheat_ru: r.wheat_ru ?? 0,
+        oc_price: r.oc_price ?? null,
+        oc_stock: r.oc_stock ?? 0,
+        fromResult: true,
+      }))
+      // 后端返回 total(总记录数);不传 page_count 时 total=len(data)
+      ppnTotal.value = resp.data.total ?? ppnList.value.length
+    } else {
+      // 非已完成任务:t_ppn 原始 PPN 列表(无指标),全量返回后前端分页
+      ppnSrc.value = 'ppn'
+      const resp = await axios.get(`${API_BASE_URL}/ppn/read`, {
+        params: { filter_contend: `source = "${task.value.taskName}"` },
+        timeout: 30000,
+      })
+      if (resp.data?.code !== 200) {
+        throw new Error(resp.data?.message || 'ppn/read 失败')
+      }
+      const rows = resp.data.data || []
+      // service 返回二维数组,列顺序: ppn, manu_id, manu_name, source, note, upload_date
+      ppnList.value = rows.map(r => ({
+        id: null,  // t_ppn 无主键收藏定位,不做收藏
+        ppn: r[0],
+        manu_name: r[2] || '',
+        source: r[3] || '',
+        note: r[4] || '',
+        upload_date: r[5] || '',
+        hq_m_avg: null,
+        hq_sup_count: null,
+        hq_stock: null,
+        ic_sup_count: null,
+        ic_stock: null,
+        fromResult: false,
+      }))
+      ppnTotal.value = ppnList.value.length
     }
-    // 新格式:后端返回对象列表(含 id 字段用于收藏定位)
-    ppnList.value = (resp.data.data || []).map(r => ({
-      id: r.id,  // t_ppn_result 主键,收藏功能定位记录用
-      ppn: r.ppn,
-      manu_name: r.manu_name || '',
-      task_name: r.task_name || '',
-      digikey_status: r.digikey_status || '',
-      hq_m_avg: r.hq_m_avg ?? 0,
-      hq_sup_count: r.hq_sup_count ?? 0,
-      hq_stock: r.hq_stock ?? 0,
-      ic_sup_count: r.ic_sup_count ?? 0,
-      ic_stock: r.ic_stock ?? 0,
-      efind_all_sup: r.efind_all_sup ?? 0,
-      wheat_global: r.wheat_global ?? 0,
-      wheat_ru: r.wheat_ru ?? 0,
-      oc_price: r.oc_price ?? null,
-      oc_stock: r.oc_stock ?? 0,
-    }))
-    // 后端返回 total(总记录数);不传 page_count 时 total=len(data)
-    ppnTotal.value = resp.data.total ?? ppnList.value.length
     // 首次加载或刷新时回到第 1 页(但如果用户手动切页再刷新,则保持当前页)
     selectedPpns.value = []
     // 加载当前页的收藏状态(用户已登录才查)
@@ -817,6 +870,7 @@ const enterEdit = () => {
     taskDesc: task.value.taskDesc,
     Tstate: task.value.Tstate,
     Tlevel: task.value.Tlevel,
+    uploadDate: task.value.uploadDate && task.value.uploadDate !== '-' ? task.value.uploadDate : '',
     endDate: task.value.endDate && task.value.endDate !== '-' ? task.value.endDate : '',
   }
   editing.value = true
@@ -830,6 +884,7 @@ const cancelEdit = () => {
     taskDesc: task.value.taskDesc,
     Tstate: task.value.Tstate,
     Tlevel: task.value.Tlevel,
+    uploadDate: task.value.uploadDate && task.value.uploadDate !== '-' ? task.value.uploadDate : '',
     endDate: task.value.endDate && task.value.endDate !== '-' ? task.value.endDate : '',
   }
   editing.value = false
@@ -854,6 +909,9 @@ const saveTask = async () => {
   const oldName = task.value.taskName
   const newName = form.value.taskName.trim()
   const nameChanged = newName !== oldName
+  // 任务状态变更:PPN 数据来源可能切换(t_ppn_result ↔ t_ppn),需重新加载
+  const oldState = task.value.Tstate
+  const stateChanged = form.value.Tstate !== oldState
 
   try {
     const payload = {
@@ -862,6 +920,8 @@ const saveTask = async () => {
       Tdes: form.value.taskDesc.trim(),
       Tstate: form.value.Tstate,
       Tlevel: form.value.Tlevel,
+      // 上传日期:空值传 null,避免数据库写入空字符串
+      TstartDate: form.value.uploadDate ? form.value.uploadDate : null,
       // 结束日期:空值传 null,避免数据库写入空字符串
       TendDate: form.value.endDate ? form.value.endDate : null,
     }
@@ -904,13 +964,15 @@ const saveTask = async () => {
     task.value.taskDesc = form.value.taskDesc.trim()
     task.value.Tstate = form.value.Tstate
     task.value.Tlevel = form.value.Tlevel
+    task.value.uploadDate = form.value.uploadDate || '-'
     task.value.endDate = form.value.endDate || '-'
     editing.value = false
     loadingToast.close()
     toast.success('任务保存成功')
 
-    // 名称变更后需重新加载 PPN(以新 source 查询)
-    if (nameChanged) {
+    // 名称或状态变更后需重新加载 PPN(名称变更→新 source 查询;状态变更→切换数据来源)
+    if (nameChanged || stateChanged) {
+      currentPage.value = 1
       await fetchPpns()
     }
   } catch (e) {

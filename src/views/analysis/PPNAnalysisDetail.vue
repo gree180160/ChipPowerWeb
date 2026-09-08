@@ -142,6 +142,14 @@
             <p class="text-sm text-gray-700 mb-2 text-center">Octopart近一年库存波动</p>
             <div ref="chartOctopart" class="w-full h-48"></div>
           </div>
+          <div class="border border-gray-100 rounded-md p-3">
+            <p class="text-sm text-gray-700 mb-2 text-center">华强网过去{{ hqStockPriceData.weekStockArray.length || 'N' }}周库存变化</p>
+            <div ref="chartHqStockWeek" class="w-full h-48"></div>
+          </div>
+          <div class="border border-gray-100 rounded-md p-3">
+            <p class="text-sm text-gray-700 mb-2 text-center">华强网过去{{ hqStockPriceData.monthStockArray.length || 'N' }}个月库存变化</p>
+            <div ref="chartHqStockMonth" class="w-full h-48"></div>
+          </div>
         </div>
       </div>
 
@@ -170,6 +178,17 @@
             <p class="text-xs text-gray-400 mt-1">建议采购价格</p>
           </div>
         </div>
+        <!-- 华强网价格周/月变化 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div class="border border-gray-100 rounded-md p-3">
+            <p class="text-sm text-gray-700 mb-2 text-center">华强网过去{{ hqStockPriceData.weekPriceArray.length || 'N' }}周价格变化</p>
+            <div ref="chartHqPriceWeek" class="w-full h-48"></div>
+          </div>
+          <div class="border border-gray-100 rounded-md p-3">
+            <p class="text-sm text-gray-700 mb-2 text-center">华强网过去{{ hqStockPriceData.monthPriceArray.length || 'N' }}个月价格变化</p>
+            <div ref="chartHqPriceMonth" class="w-full h-48"></div>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -191,6 +210,9 @@ const material = ref(null)
 // 华强网搜索指数(t_hq_peakfire: month_hot / weak_hot 的 int 数组及均值,无数据为空 → 前端显示 --)
 const hqHotData = ref({ monthHotArray: [], monthHotAvg: null, weakHotArray: [], weakHotAvg: null, updateTime: null })
 
+// 华强网库存/价格 周、月变化(t_hq_peakfire: week_stock / month_stock / week_price / month_price 数组)
+const hqStockPriceData = ref({ weekStockArray: [], monthStockArray: [], weekPriceArray: [], monthPriceArray: [] })
+
 // IC 月搜索量(t_ic_price_demand.month_search_count,无数据为 null → 前端显示 --)
 const monthSearchCount = ref(null)
 
@@ -202,6 +224,10 @@ const chartHuaqiang1 = ref(null)
 const chartHuaqiang2 = ref(null)
 const chartSupplier = ref(null)
 const chartOctopart = ref(null)
+const chartHqStockWeek = ref(null)
+const chartHqStockMonth = ref(null)
+const chartHqPriceWeek = ref(null)
+const chartHqPriceMonth = ref(null)
 
 let chartInstances = []
 
@@ -442,6 +468,35 @@ const initAllCharts = () => {
   } else {
     initEmptyChart(chartOctopart)
   }
+
+  // 华强库存周/月变化: t_hq_peakfire.week_stock / month_stock int 数组(无数据 → 暂无数据)
+  const upTime = hqHotData.value.updateTime
+  const wkStock = hqStockPriceData.value.weekStockArray
+  if (wkStock.length) {
+    initLineChart(chartHqStockWeek, wkStock, '#8b5cf6', getWeekLabelsByUpdate(wkStock.length, upTime), '库存')
+  } else {
+    initEmptyChart(chartHqStockWeek)
+  }
+  const moStock = hqStockPriceData.value.monthStockArray
+  if (moStock.length) {
+    initLineChart(chartHqStockMonth, moStock, '#6366f1', getMonthLabelsByUpdate(moStock.length, upTime), '库存')
+  } else {
+    initEmptyChart(chartHqStockMonth)
+  }
+
+  // 华强价格周/月变化: t_hq_peakfire.week_price / month_price float 数组(无数据 → 暂无数据)
+  const wkPrice = hqStockPriceData.value.weekPriceArray
+  if (wkPrice.length) {
+    initLineChart(chartHqPriceWeek, wkPrice, '#f59e0b', getWeekLabelsByUpdate(wkPrice.length, upTime), '价格')
+  } else {
+    initEmptyChart(chartHqPriceWeek)
+  }
+  const moPrice = hqStockPriceData.value.monthPriceArray
+  if (moPrice.length) {
+    initLineChart(chartHqPriceMonth, moPrice, '#ef4444', getMonthLabelsByUpdate(moPrice.length, upTime), '价格')
+  } else {
+    initEmptyChart(chartHqPriceMonth)
+  }
 }
 
 // 加载型号详情数据(从 t_ppn_result 获取真实指标 + 综合得分 + 物料等级)
@@ -469,6 +524,7 @@ const fetchModelDetail = async () => {
     if (!resultData) {
       // 接口异常/无任何数据:重置图表 ref + 空数据页(全部 --)
       hqHotData.value = { monthHotArray: [], monthHotAvg: null, weakHotArray: [], weakHotAvg: null, updateTime: null }
+      hqStockPriceData.value = { weekStockArray: [], monthStockArray: [], weekPriceArray: [], monthPriceArray: [] }
       monthSearchCount.value = null
       octopartStockData.value = []
       material.value = {
@@ -493,6 +549,13 @@ const fetchModelDetail = async () => {
       }
       // IC 月搜索量(t_ic_price_demand)
       monthSearchCount.value = resultData.month_search_count ?? null
+      // 华强库存/价格 周、月变化(t_hq_peakfire)
+      hqStockPriceData.value = {
+        weekStockArray: Array.isArray(resultData.week_stock_array) ? resultData.week_stock_array : [],
+        monthStockArray: Array.isArray(resultData.month_stock_array) ? resultData.month_stock_array : [],
+        weekPriceArray: Array.isArray(resultData.week_price_array) ? resultData.week_price_array : [],
+        monthPriceArray: Array.isArray(resultData.month_price_array) ? resultData.month_price_array : [],
+      }
       // Octopart 库存波动点位(t_octopart_info)
       octopartStockData.value = Array.isArray(resultData.stock_points) ? resultData.stock_points : []
       // 分类(t_digikey_attr.category 多行层级 → 分类/子分类/系列)

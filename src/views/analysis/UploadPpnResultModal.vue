@@ -273,7 +273,7 @@ const parseFile = async () => {
 
     const resp = await axios.post(`${API_BASE_URL}/ppn_result/upload`, fd, {
       headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 120000,
+      timeout: 300000,
     })
 
     if (resp.data?.code !== 200) {
@@ -299,7 +299,7 @@ const confirmImport = async () => {
 
     const resp = await axios.post(`${API_BASE_URL}/ppn_result/upload`, fd, {
       headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 180000,
+      timeout: 300000,
     })
 
     if (resp.data?.code !== 200) {

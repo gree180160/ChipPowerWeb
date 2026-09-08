@@ -8,9 +8,10 @@ import ModelBasicInfo from '../views/material/ModelBasicInfo.vue'
 import AnalysisTaskManagement from '../views/analysis/AnalysisTaskManagement.vue'
 import AnalysisTaskDetail from '../views/analysis/AnalysisTaskDetail.vue'
 import AnalysisQuery from '../views/analysis/AnalysisQuery.vue'
-import ModelData from '../views/analysis/ModelData.vue'
+import PPNAnalysisDetail from '../views/analysis/PPNAnalysisDetail.vue'
 import MonitorTaskManager from '../views/monitor/MonitorTaskManager.vue'
 import MonitorTaskDetail from '../views/monitor/MonitorTaskDetail.vue'
+import PPNMonitorDetail from '../views/monitor/PPNMonitorDetail.vue'
 import MonitorQuery from '../views/monitor/MonitorQuery.vue'
 import Transaction from '../views/transaction/Transaction.vue'
 import System from '../views/system/System.vue'
@@ -41,9 +42,10 @@ const routes = [
       { path: 'analysis/task', name: 'TaskManagement', component: AnalysisTaskManagement },
       { path: 'analysis/task/:taskId', name: 'TaskDetail', component: AnalysisTaskDetail },
       { path: 'analysis/query', name: 'AnalysisQuery', component: AnalysisQuery },
-      { path: 'analysis/query/model/:model', name: 'ModelData', component: ModelData },
+      { path: 'analysis/query/model/:model', name: 'PPNAnalysisDetail', component: PPNAnalysisDetail },
       { path: 'monitor/task', name: 'MonitorTask', component: MonitorTaskManager },
       { path: 'monitor/task/:taskId', name: 'MonitorTaskDetail', component: MonitorTaskDetail },
+      { path: 'monitor/ppn/:ppn', name: 'PPNMonitorDetail', component: PPNMonitorDetail },
       { path: 'monitor/query', name: 'MonitorQuery', component: MonitorQuery },
       { path: 'transaction', name: 'Transaction', component: Transaction },
       { path: 'system', name: 'System', component: System }

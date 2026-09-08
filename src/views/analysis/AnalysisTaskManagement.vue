@@ -267,6 +267,7 @@ const stateMap = {
   1: { label: '进行中', class: 'bg-blue-100 text-blue-800' },
   2: { label: '已完成', class: 'bg-green-100 text-green-800' },
   3: { label: '已取消', class: 'bg-red-100 text-red-800' },
+  4: { label: '简化版完成', class: 'bg-purple-100 text-purple-800' },
 };
 
 // 优先级映射(Tlevel -> 文本/样式)
@@ -306,7 +307,7 @@ const searchParams = ref({
   status: '全部',
 });
 
-const statusOptions = ref(['全部', '待处理', '进行中', '已完成', '已取消']);
+const statusOptions = ref(['全部', '待处理', '进行中', '已完成', '已取消', '简化版完成']);
 
 // 分析任务数据相关状态
 const taskList = ref([]);
