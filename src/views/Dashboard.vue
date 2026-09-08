@@ -6,7 +6,7 @@
       <div class="p-4 border-b border-gray-200">
         <div class="flex items-center">
           <i class="fa fa-microchip text-green-600 text-3xl mr-2"></i>
-          <span class="text-2xl font-semibold text-gray-800 ml-5">芯动力</span>
+          <span class="text-2xl font-semibold text-gray-800 ml-5">芯记录</span>
         </div>
       </div>
       

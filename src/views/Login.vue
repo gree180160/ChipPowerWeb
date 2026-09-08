@@ -3,7 +3,7 @@
     <!-- 左侧登录表单区域 -->
     <div class="login-form-container">
       <div class="form-content">
-        <h1 class="title">芯动力—电子元器件分析平台</h1>
+        <h1 class="title">芯记录—电子元器件分析平台</h1>
         <form class="login-form" @submit.prevent="handleLogin">
           <div class="input-group">
             <input 
