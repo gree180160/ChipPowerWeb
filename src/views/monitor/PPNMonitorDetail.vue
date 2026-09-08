@@ -93,7 +93,7 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import * as echarts from 'echarts'
 
-const API_BASE_URL = 'http://localhost:8001/api/data'
+import { API_BASE_URL } from '@/config'
 
 const route = useRoute()
 const router = useRouter()

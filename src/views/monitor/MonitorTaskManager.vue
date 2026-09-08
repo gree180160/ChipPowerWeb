@@ -304,7 +304,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import TaskCreateModal from '../analysis/TaskCreateModal.vue';
 
-const API_BASE_URL = 'http://localhost:8001/api/data';
+import { API_BASE_URL } from '@/config'
 const router = useRouter();
 
 // 状态映射(数据库 Tstate -> 展示文本/样式)

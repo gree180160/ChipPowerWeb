@@ -196,7 +196,7 @@ import { ref, watch } from 'vue'
 import axios from 'axios'
 import { useToast } from '@/composables/useToast'
 
-const API_BASE_URL = 'http://localhost:8001/api/data'
+import { API_BASE_URL } from '@/config'
 const toast = useToast()
 
 const props = defineProps({

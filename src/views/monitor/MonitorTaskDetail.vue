@@ -369,7 +369,7 @@ import UploadPpnResultModal from '../analysis/UploadPpnResultModal.vue'
 import PageLoading from '@/components/PageLoading.vue'
 import { useToast } from '@/composables/useToast'
 
-const API_BASE_URL = 'http://localhost:8001/api/data'
+import { API_BASE_URL } from '@/config'
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()

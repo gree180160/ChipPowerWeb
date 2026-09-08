@@ -181,7 +181,7 @@ import { useToast } from '@/composables/useToast'
 
 const toast = useToast()
 
-const API_BASE_URL = 'http://localhost:8001/api/data'
+import { API_BASE_URL } from '@/config'
 
 const props = defineProps({
   visible: { type: Boolean, default: false },

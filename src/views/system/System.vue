@@ -86,7 +86,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8001/api/data';
+import { API_BASE_URL } from '@/config'
 const router = useRouter();
 
 // 是否为开发模式(生产环境构建后为 false,测试页入口不渲染)

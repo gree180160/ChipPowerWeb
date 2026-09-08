@@ -53,7 +53,7 @@ const loading = ref(false)
 const router = useRouter()
 
 // API基础地址，根据环境配置
-const API_BASE_URL = 'http://localhost:8001/api/data'
+import { API_BASE_URL } from '@/config'
 
 const handleLogin = async () => {
   if (!username.value || !password.value) {
