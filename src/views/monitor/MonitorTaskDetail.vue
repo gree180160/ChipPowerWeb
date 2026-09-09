@@ -173,16 +173,23 @@
     </div>
 
     <!-- 关联 PPN 列表 -->
-    <div v-if="task" class="bg-white rounded-md shadow-sm overflow-hidden">
+    <div v-if="task" class="bg-white rounded-md shadow-sm">
       <!-- PPN 列表头部 -->
-      <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-          <i class="fa fa-microchip text-blue-600 mr-2"></i>关联 PPN 列表
-          <span class="ml-2 text-sm font-normal text-gray-500">
-            共 <span class="text-blue-600 font-bold">{{ ppnTotal }}</span> 个
-          </span>
-        </h3>
-        <div class="flex items-center space-x-2">
+      <div class="px-5 border-b border-gray-200 sticky top-0 z-30 bg-white whitespace-nowrap">
+        <!-- 第一行:标题,居左 -->
+        <div class="flex items-center pt-4 pb-2">
+          <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+            <i class="fa fa-microchip text-blue-600 mr-2"></i>关联 PPN 列表
+            <span class="ml-2 text-sm font-normal text-gray-500">
+              共 <span class="text-blue-600 font-bold">{{ ppnTotal }}</span> 个
+            </span>
+            <span v-if="changePeriodText" class="ml-8 text-base font-normal text-sky-600">
+              <i class="fa fa-calendar mr-1"></i>监控周期: {{ changePeriodText }}
+            </span>
+          </h3>
+        </div>
+        <!-- 第二行:操作按钮,居右 -->
+        <div class="flex items-center justify-end pb-4">
           <button
             class="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 flex items-center"
             @click="showAddPpnModal = true"
@@ -190,13 +197,13 @@
             <i class="fa fa-plus mr-1.5"></i>新增 PPN
           </button>
           <button
-            class="px-3 py-1.5 bg-white border border-green-400 text-green-700 rounded-md text-sm hover:bg-green-50 flex items-center"
+            class="ml-2 px-3 py-1.5 bg-white border border-green-400 text-green-700 rounded-md text-sm hover:bg-green-50 flex items-center"
             @click="showUploadModal = true"
           >
             <i class="fa fa-upload mr-1.5"></i>导入指标
           </button>
           <button
-            class="px-3 py-1.5 bg-white border border-red-300 text-red-700 rounded-md text-sm hover:bg-red-50 flex items-center"
+            class="ml-2 px-3 py-1.5 bg-white border border-red-300 text-red-700 rounded-md text-sm hover:bg-red-50 flex items-center"
             :disabled="!selectedPpns.length"
             @click="batchDeletePpn"
           >
@@ -204,7 +211,7 @@
             <span v-if="selectedPpns.length" class="ml-1">({{ selectedPpns.length }})</span>
           </button>
           <button
-            class="px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-md text-sm hover:bg-gray-50 flex items-center"
+            class="ml-2 px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-md text-sm hover:bg-gray-50 flex items-center"
             @click="downloadPpnCsv"
           >
             <i class="fa fa-download mr-1.5"></i>下载 CSV
@@ -213,7 +220,7 @@
       </div>
 
       <!-- PPN 表格(用 local 遮罩覆盖加载状态,min-h 确保 loading 时遮罩有足够空间) -->
-      <div class="overflow-x-auto relative min-h-[480px]">
+      <div class="min-h-[480px]">
         <!-- 加载遮罩:覆盖表格区域,使用 PageLoading 组件 -->
         <PageLoading
           :visible="ppnLoading"
@@ -231,7 +238,7 @@
             <col class="w-32" />   <!-- 供应商数量变化 -->
             <col class="w-24" />   <!-- 操作 -->
           </colgroup>
-          <thead class="bg-gray-50">
+          <thead class="bg-gray-50 sticky top-[103px] z-20">
             <tr>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                 <input
@@ -440,6 +447,28 @@ const stockChangeClass = (v) => {
   return 'text-gray-500'
 }
 
+// 日期转 YY_MM_DD 展示(年份取后两位),"2026-09-09" -> "26_09_09"
+const fmtPeriodDate = (d) => {
+  const s = String(d).split(' ')[0] // 取日期部分
+  if (!s) return ''
+  const [y, m, dd] = s.split('-')
+  return `${String(y).slice(-2)}_${m}_${dd}`
+}
+
+// 监控周期:汇总所有 PPN 的监控日期中最新的两个日期,按日期从小到大显示
+const changePeriodText = computed(() => {
+  const dates = new Set()
+  ppnList.value.forEach(p => {
+    if (p.m_date_latest) dates.add(p.m_date_latest)
+    if (p.m_date_prev) dates.add(p.m_date_prev)
+  })
+  if (!dates.size) return ''
+  const sorted = [...dates].sort() // 升序
+  // 取最大的两个日期(即最近两个监控日),小日期在前 = 起点,大日期在后 = 终点
+  const lastTwo = sorted.slice(-2)
+  return `${fmtPeriodDate(lastTwo[0])} - ${fmtPeriodDate(lastTwo[1])}`
+})
+
 const pageRange = computed(() => {
   const range = []
   const maxShow = 5
@@ -545,6 +574,8 @@ const fetchPpns = async () => {
         ...p,
         stock_change: chg ? chg.stock_change : null,
         supplier_change: chg ? chg.supplier_change : null,
+        m_date_latest: chg ? chg.m_date_latest : null,
+        m_date_prev: chg ? chg.m_date_prev : null,
       }
     })
     ppnTotal.value = ppnList.value.length
