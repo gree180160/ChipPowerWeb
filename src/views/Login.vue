@@ -9,7 +9,7 @@
             <input 
               type="text" 
               placeholder="请输入账号" 
-              class="input-field" 
+              class="input-field"
               v-model="username"
               required
             />
