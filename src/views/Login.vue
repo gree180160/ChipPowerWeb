@@ -43,17 +43,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { API_BASE_URL } from '@/config'
 
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const router = useRouter()
 
-// API基础地址，根据环境配置
-import { API_BASE_URL } from '@/config'
+// 已登录用户访问登录页时，直接跳转到首页
+onMounted(() => {
+  if (localStorage.getItem('token')) {
+    router.replace('/')
+  }
+})
 
 const handleLogin = async () => {
   if (!username.value || !password.value) {
