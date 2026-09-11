@@ -177,7 +177,7 @@
       <!-- PPN 列表头部 -->
       <div class="px-5 border-b border-gray-200 sticky top-0 z-30 bg-white whitespace-nowrap">
         <!-- 第一行:标题,居左 -->
-        <div class="flex items-center pt-4 pb-2">
+        <div class="pt-4">
           <h3 class="text-lg font-semibold text-gray-900 flex items-center">
             <i class="fa fa-microchip text-blue-600 mr-2"></i>关联 PPN 列表
             <span class="ml-2 text-sm font-normal text-gray-500">
